@@ -11,7 +11,7 @@
 
 <meta name="author" content="Diogo Melo" />
 
-<meta name="date" content="2018-09-11" />
+<meta name="date" content="2018-10-18" />
 
 <title>Tutorial Biologia Evolutiva 2018</title>
 
@@ -254,7 +254,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Tutorial Biologia Evolutiva 2018</h1>
 <h4 class="author"><em>Diogo Melo</em></h4>
-<h4 class="date"><em>September 11, 2018</em></h4>
+<h4 class="date"><em>October 18, 2018</em></h4>
 
 </div>
 
@@ -379,10 +379,10 @@ dentus_means_ace</code></pre></div>
 <pre><code>##    humerus     ulna    femur    tibia
 ## 1 7.617473 15.28706 20.62796 27.49018</code></pre>
 <p>Agora podemos usar esse vetores de caracteres para calcular nossos vetores de mudança fenotípica ao longo da filogenia, os famigerados <span class="math inline">\(\Delta z\)</span>. Para isso, é só subtrair o descendente do ancestral. Por exemplo, para o <span class="math inline">\(\Delta z\)</span> associado ao ramo que vai do nó AC para o terminal C, fazemos:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">deltaZ_AC_C =<span class="st"> </span>l_dentus$C -<span class="st"> </span>l_dentus$AC
-deltaZ_AC_C</code></pre></div>
-<pre><code>##    humerus     ulna     femur     tibia
-## 1 1.197488 2.437081 -2.028209 -3.086728</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">deltaZ_DB_D =<span class="st"> </span>l_dentus$D -<span class="st"> </span>l_dentus$DB
+deltaZ_DB_D</code></pre></div>
+<pre><code>##    humerus     ulna   femur    tibia
+## 1 1.750165 3.802614 4.50284 6.246327</code></pre>
 <p>Este é o vetor de mudança evolutiva entre a espécie C e seu ancestral mais próximo.</p>
 </div>
 <div id="correlacao-de-vetores" class="section level2">
@@ -457,9 +457,9 @@ Cor(x, y) =  \frac{x \cdot y}{\|x\|\|y\|}
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">corVector =<span class="st"> </span>function(x, y) <span class="kw">prod_interno</span>(x, y)/(<span class="kw">norma</span>(x)*<span class="kw">norma</span>(y))</code></pre></div>
 <p>Agora podemos usar essa função para calcular correlações entre todos os nossos vetores e responder perguntas evolutivas! Por exemplo, será que a diferenciação da população C se deu ao longo da sua linha de menor resistencia evolutiva?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cov_matrices =<span class="st"> </span><span class="kw">dlply</span>(dentus, .(species), function(x) <span class="kw">cov</span>(x[,<span class="dv">1</span>:<span class="dv">4</span>]))
-PC1_C =<span class="st"> </span><span class="kw">eigen</span>(cov_matrices$C)$vectors[,<span class="dv">1</span>]
-<span class="kw">abs</span>(<span class="kw">corVector</span>(PC1_C, deltaZ_AC_C))</code></pre></div>
-<pre><code>## [1] 0.1285191</code></pre>
+PC1_D=<span class="st"> </span><span class="kw">eigen</span>(cov_matrices$D)$vectors[,<span class="dv">1</span>]
+<span class="kw">abs</span>(<span class="kw">corVector</span>(PC1_D, deltaZ_DB_D))</code></pre></div>
+<pre><code>## [1] 0.9195546</code></pre>
 <p>Parce que sim!!</p>
 <p>Agora divirta-se, calcule os <span class="math inline">\(\Delta z\)</span> ao longo da filogenia e use a correlação de vetores para investigar seus dados. Os <span class="math inline">\(\Delta z\)</span> são todos na mesma direção? Como os <span class="math inline">\(\Delta z\)</span> nos teminais se alinham com as respectivas linhas de menor resistência? Pense em quais perguntas você é capaz de responder com esses dados agora.</p>
 </div>

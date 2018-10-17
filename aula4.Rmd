@@ -1,7 +1,7 @@
 ---
 title: "Tutorial Biologia Evolutiva 2018"
 author: "Diogo Melo"
-date: "September 11, 2018"
+date: "October 18, 2018"
 output:
   html_document:
     highlight: tango
@@ -143,8 +143,8 @@ l_dentus$root
 Agora podemos usar esse vetores de caracteres para calcular nossos vetores de mudança fenotípica ao longo da filogenia, os famigerados $\Delta z$. Para isso, é só subtrair o descendente do ancestral. Por exemplo, para o $\Delta z$ associado ao ramo que vai do nó AC para o terminal C, fazemos:
 
 ```{r}
-deltaZ_AC_C = l_dentus$C - l_dentus$AC
-deltaZ_AC_C
+deltaZ_DB_D = l_dentus$D - l_dentus$DB
+deltaZ_DB_D
 ```
 
 Este é o vetor de mudança evolutiva entre a espécie C e seu ancestral mais próximo.
@@ -263,10 +263,9 @@ Agora podemos usar essa função para calcular correlações entre todos os noss
 
 ```{r}
 cov_matrices = dlply(dentus, .(species), function(x) cov(x[,1:4]))
-PC1_C = eigen(cov_matrices$C)$vectors[,1]
-abs(corVector(PC1_C, deltaZ_AC_C))
+PC1_D= eigen(cov_matrices$D)$vectors[,1]
+abs(corVector(PC1_D, deltaZ_DB_D))
 ```
-
 Parce que sim!!
 
 
