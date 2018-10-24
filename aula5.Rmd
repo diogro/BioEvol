@@ -1,7 +1,7 @@
 ---
 title: "Tutorial Biologia Evolutiva 2017"
 author: "Diogo Melo"
-date: "October 23, 2017"
+date: "October 25, 2018"
 output:
   html_document:
     highlight: tango
@@ -35,7 +35,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Matrizes ancestrais
 
-O calculo das matrizes ancestrais é feito como uma média ponderada das matrizes ao longo da filogenia. Isso é equivalente a calcular uma matriz de covariância usando a formula usual da covariância, mas substituindo a média global pela média da espécie do indivíduo sendo considerado. Se $\overline{z^i}_{sp[k]}$ representa a média da espécie do indivíduo $k$ para o caráter $i$, a matriz de covariância para um nó ancestral é dada por:
+O calculo das matrizes ancestrais é feito como uma média ponderada das matrizes ao longo da filogenia. Isso é equivalente a calcular uma matriz de covariância usando a fórmula usual da covariância, mas substituindo a média global pela média da espécie do indivíduo sendo considerado. Se $\overline{z^i}_{sp[k]}$ representa a média da espécie do indivíduo $k$ para o caráter $i$, a matriz de covariância para um nó ancestral é dada por:
 
 $$
 Cov(z^i, z^j) = \frac{1}{N} \sum_{k = 1}^{N} (z_{k}^i - \overline{z^i}_{sp[k]})(z_{k}^j - \overline{z^j}_{sp[k]})
@@ -49,42 +49,42 @@ data(dentus)
 cov_matrices = dlply(dentus, .(species), function(x) cov(x[,1:4]))
 ```
 
-A matriz do ancestral comum entre as espécies A e D é dada pela ponderada entre as matrizes atuais:
+A matriz do ancestral comum entre as espécies A e C é dada pela ponderada entre as matrizes atuais:
 
 ```{r}
-cov_matrix_AD = (60 * cov_matrices$A + 60 * cov_matrices$D)/120
-cov_matrix_AD
+cov_matrix_AC = (60 * cov_matrices$A + 60 * cov_matrices$C)/120
+cov_matrix_AC
 ```
 
 A ideia é que essa matriz é a mesma coisa que fazer a covariância normalmente, mas usando a média das espécies separadamente. Vamos usar a formula de covariância diretamente, mas controlando para o número de graus de liberdade:
 
 ```{r}
 means = daply(dentus, .(species), function(x) colMeans(x[,1:4]))
-dentus_AD = dentus[dentus$species == "A" | dentus$species == "D",]
-medias_AD = means[dentus[dentus$species == "A" | dentus$species == "D", 5],]
+dentus_AC = dentus[dentus$species == "A" | dentus$species == "C",]
+medias_AC = means[dentus[dentus$species == "A" | dentus$species == "C", 5],]
 
 # Essa correção pelos graus de liberdade é meio confusa, mas pense que a var()
-#vai tirar um grau de liberdade, mas a gente calculou duas médias,
+# vai tirar um grau de liberdade, mas a gente calculou duas médias,
 # então precisamos tirar outro!
-(119/(119-1)) * var(dentus_AD[,1:4] - medias_AD)
+(119/(119-1)) * var(dentus_AC[,1:4] - medias_AC)
 ```
 
 Bacana, deu a mesma coisa. Outra solução nesse caso é escrever o problema como uma regressão linear e extrair a covariância dos residuos:
 
 ```{r}
-residuos_AD = residuals(lm(as.matrix(dentus_AD[,1:4])~dentus_AD[,5]))
-(119/(119-1)) * cov(residuos_AD)
+residuos_AC = residuals(lm(as.matrix(dentus_AC[,1:4])~dentus_AC[,5]))
+(119/(119-1)) * cov(residuos_AC)
 ```
 
-O resultado é o mesmo. Você pode ler o termo `as.matrix(dentus_AD[,1:4])~dentus_AD[,5]` como: _as colunas de 1 a 4 do objeto dentus_AD em função da quinta coluna do objeto dentus_AD_. Você pode pensar no operado `~` como um "_em função de_". Variáveis dependentes à esquerda e preditoras à direita.
+O resultado é o mesmo. Você pode ler o termo `as.matrix(dentus_AC[,1:4])~dentus_AC[,5]` como: _as colunas de 1 a 4 do objeto dentus_AC em função da quinta coluna do objeto dentus_AC_. Você pode pensar no operador `~` como um "_em função de_". Variáveis dependentes à esquerda e preditoras à direita.
 
 Um jeito mais simples ainda é usar a função CalculateMatrix() do pacote evolqg, que calcula os graus de liberdade corretamente a partir do modelo linear:
 
 ```{r}
-CalculateMatrix(lm(as.matrix(dentus_AD[,1:4])~dentus_AD[,5]))
+CalculateMatrix(lm(as.matrix(dentus_AC[,1:4])~dentus_AC[,5]))
 ```
 
-Ótimo, temos vários jeitos de calcular as matrizes de covariancia usando as médias de cada espécie. Essa matriz ponderada de vários grupos ao mesmo tempo costuma ser chamada de $\mathbf{W}$, ou matriz ponderada dentro de grupos (within-groups, dai o $\mathbf{W}$).
+Ótimo, temos vários jeitos de calcular as matrizes de covariância usando as médias de cada espécie. Essa matriz ponderada de vários grupos ao mesmo tempo costuma ser chamada de $\mathbf{W}$, ou matriz ponderada dentro de grupos (within-groups, dai o $\mathbf{W}$).
 
 Vamos calcular então a $\mathbf{W}$ de todos os grupos, que também é a nossa matriz ancestral da raiz da filogenia:
 
@@ -100,10 +100,10 @@ Tudo isso é bom e poderiámos calcular as matrizes ancestrais assim para os nos
 Primeiro a filogenia:
 ```{r}
 if(!require(ape)){install.packages("ape"); library(ape)}
-TREE <- "(E:3,((C:1,B:1):1,(D:1, A:1):1):1):1;"
+TREE <- "(E:3,((D:1,B:1):1,(C:1, A:1):1):1);"
 tree <- read.tree(text = TREE)
-tree$tip.label = c("E", "C", "B", "D", "A")
-tree$node.label = c("root", "ABCD", "CB", "AD")
+tree$tip.label = c("E", "D", "B", "C", "A")
+tree$node.label = c("root", "ABCD", "DB", "AC")
 ```
 
 E agora usamos a filogenia e a lista de matrizes atuais na funçao PhyloW para calcular uma matriz ancestral (ou dentro de grupos) para cada nó:

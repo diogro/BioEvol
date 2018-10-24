@@ -11,7 +11,7 @@
 
 <meta name="author" content="Diogo Melo" />
 
-<meta name="date" content="2017-10-23" />
+<meta name="date" content="2018-10-25" />
 
 <title>Tutorial Biologia Evolutiva 2017</title>
 
@@ -120,6 +120,9 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -251,7 +254,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Tutorial Biologia Evolutiva 2017</h1>
 <h4 class="author"><em>Diogo Melo</em></h4>
-<h4 class="date"><em>October 23, 2017</em></h4>
+<h4 class="date"><em>October 25, 2018</em></h4>
 
 </div>
 
@@ -274,7 +277,7 @@ div.tocify {
 </ul>
 <div id="matrizes-ancestrais" class="section level2">
 <h2><span class="header-section-number">2.1</span> Matrizes ancestrais</h2>
-<p>O calculo das matrizes ancestrais é feito como uma média ponderada das matrizes ao longo da filogenia. Isso é equivalente a calcular uma matriz de covariância usando a formula usual da covariância, mas substituindo a média global pela média da espécie do indivíduo sendo considerado. Se <span class="math inline">\(\overline{z^i}_{sp[k]}\)</span> representa a média da espécie do indivíduo <span class="math inline">\(k\)</span> para o caráter <span class="math inline">\(i\)</span>, a matriz de covariância para um nó ancestral é dada por:</p>
+<p>O calculo das matrizes ancestrais é feito como uma média ponderada das matrizes ao longo da filogenia. Isso é equivalente a calcular uma matriz de covariância usando a fórmula usual da covariância, mas substituindo a média global pela média da espécie do indivíduo sendo considerado. Se <span class="math inline">\(\overline{z^i}_{sp[k]}\)</span> representa a média da espécie do indivíduo <span class="math inline">\(k\)</span> para o caráter <span class="math inline">\(i\)</span>, a matriz de covariância para um nó ancestral é dada por:</p>
 <p><span class="math display">\[
 Cov(z^i, z^j) = \frac{1}{N} \sum_{k = 1}^{N} (z_{k}^i - \overline{z^i}_{sp[k]})(z_{k}^j - \overline{z^j}_{sp[k]})
 \]</span></p>
@@ -284,45 +287,45 @@ Cov(z^i, z^j) = \frac{1}{N} \sum_{k = 1}^{N} (z_{k}^i - \overline{z^i}_{sp[k]})(
 <pre><code>## Loading required package: plyr</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(dentus)
 cov_matrices =<span class="st"> </span><span class="kw">dlply</span>(dentus, .(species), <span class="cf">function</span>(x) <span class="kw">cov</span>(x[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>]))</code></pre></div>
-<p>A matriz do ancestral comum entre as espécies A e D é dada pela ponderada entre as matrizes atuais:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cov_matrix_AD =<span class="st"> </span>(<span class="dv">60</span> <span class="op">*</span><span class="st"> </span>cov_matrices<span class="op">$</span>A <span class="op">+</span><span class="st"> </span><span class="dv">60</span> <span class="op">*</span><span class="st"> </span>cov_matrices<span class="op">$</span>D)<span class="op">/</span><span class="dv">120</span>
-cov_matrix_AD</code></pre></div>
+<p>A matriz do ancestral comum entre as espécies A e C é dada pela ponderada entre as matrizes atuais:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cov_matrix_AC =<span class="st"> </span>(<span class="dv">60</span> <span class="op">*</span><span class="st"> </span>cov_matrices<span class="op">$</span>A <span class="op">+</span><span class="st"> </span><span class="dv">60</span> <span class="op">*</span><span class="st"> </span>cov_matrices<span class="op">$</span>C)<span class="op">/</span><span class="dv">120</span>
+cov_matrix_AC</code></pre></div>
 <pre><code>##           humerus      ulna     femur     tibia
-## humerus 0.9255634 0.7759427 0.3894473 0.4169458
-## ulna    0.7759427 1.0422247 0.5538027 0.4972408
-## femur   0.3894473 0.5538027 1.0986233 0.7010014
-## tibia   0.4169458 0.4972408 0.7010014 0.9898896</code></pre>
+## humerus 0.9210603 0.7668140 0.1162764 0.3022081
+## ulna    0.7668140 1.0114863 0.2013324 0.3470433
+## femur   0.1162764 0.2013324 1.0996158 0.4849014
+## tibia   0.3022081 0.3470433 0.4849014 0.9897610</code></pre>
 <p>A ideia é que essa matriz é a mesma coisa que fazer a covariância normalmente, mas usando a média das espécies separadamente. Vamos usar a formula de covariância diretamente, mas controlando para o número de graus de liberdade:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">means =<span class="st"> </span><span class="kw">daply</span>(dentus, .(species), <span class="cf">function</span>(x) <span class="kw">colMeans</span>(x[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>]))
-dentus_AD =<span class="st"> </span>dentus[dentus<span class="op">$</span>species <span class="op">==</span><span class="st"> &quot;A&quot;</span> <span class="op">|</span><span class="st"> </span>dentus<span class="op">$</span>species <span class="op">==</span><span class="st"> &quot;D&quot;</span>,]
-medias_AD =<span class="st"> </span>means[dentus[dentus<span class="op">$</span>species <span class="op">==</span><span class="st"> &quot;A&quot;</span> <span class="op">|</span><span class="st"> </span>dentus<span class="op">$</span>species <span class="op">==</span><span class="st"> &quot;D&quot;</span>, <span class="dv">5</span>],]
+dentus_AC =<span class="st"> </span>dentus[dentus<span class="op">$</span>species <span class="op">==</span><span class="st"> &quot;A&quot;</span> <span class="op">|</span><span class="st"> </span>dentus<span class="op">$</span>species <span class="op">==</span><span class="st"> &quot;C&quot;</span>,]
+medias_AC =<span class="st"> </span>means[dentus[dentus<span class="op">$</span>species <span class="op">==</span><span class="st"> &quot;A&quot;</span> <span class="op">|</span><span class="st"> </span>dentus<span class="op">$</span>species <span class="op">==</span><span class="st"> &quot;C&quot;</span>, <span class="dv">5</span>],]
 
 <span class="co"># Essa correção pelos graus de liberdade é meio confusa, mas pense que a var()</span>
-<span class="co">#vai tirar um grau de liberdade, mas a gente calculou duas médias,</span>
+<span class="co"># vai tirar um grau de liberdade, mas a gente calculou duas médias,</span>
 <span class="co"># então precisamos tirar outro!</span>
-(<span class="dv">119</span><span class="op">/</span>(<span class="dv">119</span><span class="op">-</span><span class="dv">1</span>)) <span class="op">*</span><span class="st"> </span><span class="kw">var</span>(dentus_AD[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>] <span class="op">-</span><span class="st"> </span>medias_AD)</code></pre></div>
+(<span class="dv">119</span><span class="op">/</span>(<span class="dv">119</span><span class="op">-</span><span class="dv">1</span>)) <span class="op">*</span><span class="st"> </span><span class="kw">var</span>(dentus_AC[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>] <span class="op">-</span><span class="st"> </span>medias_AC)</code></pre></div>
 <pre><code>##           humerus      ulna     femur     tibia
-## humerus 0.9255634 0.7759427 0.3894473 0.4169458
-## ulna    0.7759427 1.0422247 0.5538027 0.4972408
-## femur   0.3894473 0.5538027 1.0986233 0.7010014
-## tibia   0.4169458 0.4972408 0.7010014 0.9898896</code></pre>
+## humerus 0.9210603 0.7668140 0.1162764 0.3022081
+## ulna    0.7668140 1.0114863 0.2013324 0.3470433
+## femur   0.1162764 0.2013324 1.0996158 0.4849014
+## tibia   0.3022081 0.3470433 0.4849014 0.9897610</code></pre>
 <p>Bacana, deu a mesma coisa. Outra solução nesse caso é escrever o problema como uma regressão linear e extrair a covariância dos residuos:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">residuos_AD =<span class="st"> </span><span class="kw">residuals</span>(<span class="kw">lm</span>(<span class="kw">as.matrix</span>(dentus_AD[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])<span class="op">~</span>dentus_AD[,<span class="dv">5</span>]))
-(<span class="dv">119</span><span class="op">/</span>(<span class="dv">119</span><span class="op">-</span><span class="dv">1</span>)) <span class="op">*</span><span class="st"> </span><span class="kw">cov</span>(residuos_AD)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">residuos_AC =<span class="st"> </span><span class="kw">residuals</span>(<span class="kw">lm</span>(<span class="kw">as.matrix</span>(dentus_AC[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])<span class="op">~</span>dentus_AC[,<span class="dv">5</span>]))
+(<span class="dv">119</span><span class="op">/</span>(<span class="dv">119</span><span class="op">-</span><span class="dv">1</span>)) <span class="op">*</span><span class="st"> </span><span class="kw">cov</span>(residuos_AC)</code></pre></div>
 <pre><code>##           humerus      ulna     femur     tibia
-## humerus 0.9255634 0.7759427 0.3894473 0.4169458
-## ulna    0.7759427 1.0422247 0.5538027 0.4972408
-## femur   0.3894473 0.5538027 1.0986233 0.7010014
-## tibia   0.4169458 0.4972408 0.7010014 0.9898896</code></pre>
-<p>O resultado é o mesmo. Você pode ler o termo <code>as.matrix(dentus_AD[,1:4])~dentus_AD[,5]</code> como: <em>as colunas de 1 a 4 do objeto dentus_AD em função da quinta coluna do objeto dentus_AD</em>. Você pode pensar no operado <code>~</code> como um “<em>em função de</em>”. Variáveis dependentes à esquerda e preditoras à direita.</p>
+## humerus 0.9210603 0.7668140 0.1162764 0.3022081
+## ulna    0.7668140 1.0114863 0.2013324 0.3470433
+## femur   0.1162764 0.2013324 1.0996158 0.4849014
+## tibia   0.3022081 0.3470433 0.4849014 0.9897610</code></pre>
+<p>O resultado é o mesmo. Você pode ler o termo <code>as.matrix(dentus_AC[,1:4])~dentus_AC[,5]</code> como: <em>as colunas de 1 a 4 do objeto dentus_AC em função da quinta coluna do objeto dentus_AC</em>. Você pode pensar no operador <code>~</code> como um “<em>em função de</em>”. Variáveis dependentes à esquerda e preditoras à direita.</p>
 <p>Um jeito mais simples ainda é usar a função CalculateMatrix() do pacote evolqg, que calcula os graus de liberdade corretamente a partir do modelo linear:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">CalculateMatrix</span>(<span class="kw">lm</span>(<span class="kw">as.matrix</span>(dentus_AD[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])<span class="op">~</span>dentus_AD[,<span class="dv">5</span>]))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">CalculateMatrix</span>(<span class="kw">lm</span>(<span class="kw">as.matrix</span>(dentus_AC[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])<span class="op">~</span>dentus_AC[,<span class="dv">5</span>]))</code></pre></div>
 <pre><code>##           humerus      ulna     femur     tibia
-## humerus 0.9255634 0.7759427 0.3894473 0.4169458
-## ulna    0.7759427 1.0422247 0.5538027 0.4972408
-## femur   0.3894473 0.5538027 1.0986233 0.7010014
-## tibia   0.4169458 0.4972408 0.7010014 0.9898896</code></pre>
-<p>Ótimo, temos vários jeitos de calcular as matrizes de covariancia usando as médias de cada espécie. Essa matriz ponderada de vários grupos ao mesmo tempo costuma ser chamada de <span class="math inline">\(\mathbf{W}\)</span>, ou matriz ponderada dentro de grupos (within-groups, dai o <span class="math inline">\(\mathbf{W}\)</span>).</p>
+## humerus 0.9210603 0.7668140 0.1162764 0.3022081
+## ulna    0.7668140 1.0114863 0.2013324 0.3470433
+## femur   0.1162764 0.2013324 1.0996158 0.4849014
+## tibia   0.3022081 0.3470433 0.4849014 0.9897610</code></pre>
+<p>Ótimo, temos vários jeitos de calcular as matrizes de covariância usando as médias de cada espécie. Essa matriz ponderada de vários grupos ao mesmo tempo costuma ser chamada de <span class="math inline">\(\mathbf{W}\)</span>, ou matriz ponderada dentro de grupos (within-groups, dai o <span class="math inline">\(\mathbf{W}\)</span>).</p>
 <p>Vamos calcular então a <span class="math inline">\(\mathbf{W}\)</span> de todos os grupos, que também é a nossa matriz ancestral da raiz da filogenia:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">W =<span class="st"> </span><span class="kw">CalculateMatrix</span>(<span class="kw">lm</span>(<span class="kw">as.matrix</span>(dentus[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])<span class="op">~</span>dentus<span class="op">$</span>species))
 W</code></pre></div>
@@ -336,10 +339,10 @@ W</code></pre></div>
 <p>Primeiro a filogenia:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span>(<span class="op">!</span><span class="kw">require</span>(ape)){<span class="kw">install.packages</span>(<span class="st">&quot;ape&quot;</span>); <span class="kw">library</span>(ape)}</code></pre></div>
 <pre><code>## Loading required package: ape</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">TREE &lt;-<span class="st"> &quot;(E:3,((C:1,B:1):1,(D:1, A:1):1):1):1;&quot;</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">TREE &lt;-<span class="st"> &quot;(E:3,((D:1,B:1):1,(C:1, A:1):1):1);&quot;</span>
 tree &lt;-<span class="st"> </span><span class="kw">read.tree</span>(<span class="dt">text =</span> TREE)
-tree<span class="op">$</span>tip.label =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;E&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;D&quot;</span>, <span class="st">&quot;A&quot;</span>)
-tree<span class="op">$</span>node.label =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;root&quot;</span>, <span class="st">&quot;ABCD&quot;</span>, <span class="st">&quot;CB&quot;</span>, <span class="st">&quot;AD&quot;</span>)</code></pre></div>
+tree<span class="op">$</span>tip.label =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;E&quot;</span>, <span class="st">&quot;D&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;A&quot;</span>)
+tree<span class="op">$</span>node.label =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;root&quot;</span>, <span class="st">&quot;ABCD&quot;</span>, <span class="st">&quot;DB&quot;</span>, <span class="st">&quot;AC&quot;</span>)</code></pre></div>
 <p>E agora usamos a filogenia e a lista de matrizes atuais na funçao PhyloW para calcular uma matriz ancestral (ou dentro de grupos) para cada nó:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">all_cov_matrices =<span class="st"> </span><span class="kw">PhyloW</span>(tree, cov_matrices)
 <span class="kw">attributes</span>(all_cov_matrices)<span class="op">$</span>split_labels =<span class="st"> </span><span class="kw">attributes</span>(all_cov_matrices)<span class="op">$</span>names</code></pre></div>
