@@ -1,0 +1,70 @@
+---
+title: "Tutorial Biologia Evolutiva 2018"
+date: "November 1st, 2018"
+output:
+  html_document:
+    highlight: tango
+    number_sections: yes
+    theme: flatly
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: no
+  pdf_document:
+    toc: yes
+---
+
+# Objetivos da Aula Complementar
+
+Na aula 4 nós utilizamos o método de máxima verossimilhança para estimar os estados ancestrais para os 4 caracteres em todos os nós da filogenia. Nós utilizamos o programa mesquite e reconstruímos os estados ancestrais para os 4 caracteres por parcimônia linear.
+
+O objetivo desta aula bonus é estimar a diferença nas médias entre ancestrais e descendentes ao longo da filogenia ($\Delta z$), usando os dados reconstruídos por parcimônia linear. Compare esses resultados com aqueles gerados na aula 4 usando máxima verossimilhança e avalie se houve mudança nos resultados decorrentes dos diferentes métodos de reconstrução utilizados.
+
+```{r, warning=FALSE, message=FALSE }
+if(!require(evolqg)){install.packages("evolqg"); library(evolqg)}
+if(!require(ape)){install.packages("ape"); library(ape)}
+data(dentus)
+```
+
+```{r, warning=FALSE, message=FALSE}
+cov_matrices = dlply(dentus, .(species), function(x) cov(x[,1:4]))
+cov_matrices
+```
+
+```{r, warning=FALSE, message=FALSE}
+TREE <- "(E:3,((D:1,B:1):1,(C:1, A:1):1):1);"
+tree <- read.tree(text = TREE)
+tree$tip.label = c("E", "D", "B", "C", "A")
+tree$node.label = c("root", "ABCD", "DB", "AC")
+plot(tree, show.node.label=TRUE)
+nodelabels()
+```
+
+```{r, warning=FALSE, message=FALSE}
+all_cov_matrices = PhyloW(tree, cov_matrices)
+attributes(all_cov_matrices)$split_labels = attributes(all_cov_matrices)$names
+```
+
+```{r, warning=FALSE, message=FALSE}
+all_pc1 = llply(all_cov_matrices, function(x) eigen(x)$vectors[,1])
+```
+
+Essa tabela abaixo já contem os estados de caráter ancestral reconstruídos por parcimômia linear:
+
+```{r}
+medias_linear_parsimony <- read.csv("medias_recons_linear_parsimony.csv")
+```
+
+```{r}
+l_dentus_linear_parsimony = dlply(medias_linear_parsimony, .(species), numcolwise(identity))
+```
+
+Agora podemos usar esse vetores de caracteres para calcular nossos vetores de mudança fenotípica ao longo da filogenia.
+
+```{r}
+deltaZ_AC_A_lp = l_dentus_linear_parsimony$A - l_dentus_linear_parsimony$AC
+deltaZ_AC_A_lp
+```
+
+Calcule para o restante da filogenia e avalie se houve mudança com relação aos resultados da aula 4, obtidos por meio da recosntrução por máxima verossimilhança.
+
