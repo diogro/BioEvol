@@ -1,7 +1,7 @@
 ---
-title: "Tutorial Biologia Evolutiva 2017"
+title: "Tutorial Biologia Evolutiva 2018"
 author: "Diogo Melo"
-date: "October 12, 2017"
+date: "October 30, 2018"
 output:
   html_document:
     highlight: tango
@@ -32,3 +32,4 @@ Primeiro alguns links:
 4. [Aula 4 - Estados ancestrais e resposta evolutiva](http://diogro.github.io/BioEvol/aula4.html)
 5. [Aula 5 - Matrizes Ancestrais](http://diogro.github.io/BioEvol/aula5.html)
 6. [Aula 6 - Gradientes de Seleção](http://diogro.github.io/BioEvol/aula6.html)
+7. [Aula 7 - Análise de Variância](http://diogro.github.io/BioEvol/analise_variancia.html)

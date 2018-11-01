@@ -1,7 +1,7 @@
 ---
-title: "Tutorial Biologia Evolutiva 2017"
+title: "Tutorial Biologia Evolutiva 2018"
 author: "Diogo Melo"
-date: "October 23, 2017"
+date: "November 1st, 2018"
 output:
   html_document:
     highlight: tango
@@ -39,11 +39,11 @@ knitr::opts_chunk$set(echo = TRUE)
 # Objetivos da aula 6
 
 - Calcular os gradientes de seleção ($\beta$) ao longo da filogenia
-- Calcular a correlação entre gradientes de seleção resposta à seleção ($\Delta z$)
+- Calcular a correlação entre gradientes de seleção e resposta à seleção ($\Delta z$)
 
 ## Equação do criador
 
-Para entender a equação de resposta à seleção, vamos lembrar da herdabilidade (relacionada com a covariância entre pais e filhos). Pense que temos uma população expressando um caráter quantitativo qualquer com herdabilidade ($h^2$) de 0.6. Isso significa que nessa população, se fizermos uma gráfico com a média do valor do caráter nos pais no eixo $x$ e o valor do caráter dos filhos no eixo $y$, centralizando o grafico na média dos pais, teriamos alguma coisa assim:
+Para entender a equação de resposta à seleção, vamos lembrar da herdabilidade (relacionada com a covariância entre pais e filhos). Pense que temos uma população expressando um caráter quantitativo qualquer com herdabilidade ($h^2$) de 0.6. Isso significa que nessa população, se fizermos uma gráfico com a média do valor do caráter dos pais no eixo $x$ e o valor do caráter dos filhos no eixo $y$, centralizando o grafico na média dos pais, teriamos alguma coisa assim:
 
 ```{r, echo = FALSE}
 library(mvtnorm)
@@ -68,7 +68,7 @@ ggplot(data, aes(x, y)) + geom_polygon(data = shade, aes(x, y), fill = "lightblu
 
 A região em azul representa o limiar de seleção (apenas pais maiores que 1 deixam descententes). A média dos pais depois da seleção está marcada pela linha tracejada vertical. Usando uma regressão linear, podemos descobrir a média dos filhos dos pais que sobrevivem à seleção. A linha tracejada horizontal marca a média dos filhos após a seleção. O coeficiente de inclinação da regressão entre pais e filhos é a herdabilidade do caráter na população. Como nós centralizamos os pais e a reta de regressão passa pelo zero, sabemos que a média dos pais e filhos antes da seleção eram iguais.
 
-A diferença entre a média dos pais antes e depois da seleção é chamada de diferencial de seleção ($S$), enquanto a diferença na média dos filhos é chamada de resposta à seleção ($R$). A razão entre ela, ou o coeficiente da inclinação da reta de regressão entre pais e filhos, ou a tangente do ângulo da reta, é a herdabilidade ($h^2$). Graficamente:
+A diferença entre a média dos pais antes e depois da seleção é chamada de diferencial de seleção ($S$), enquanto a diferença na média dos filhos é chamada de resposta à seleção ($R$). A razão entre ela, ou o coeficiente de inclinação da reta de regressão entre pais e filhos, ou a tangente do ângulo da reta, é a herdabilidade ($h^2$). Graficamente:
 
 ```{r, echo = FALSE}
 S = data.frame(x = c(0, 0, x_mean, x_mean),
@@ -259,10 +259,10 @@ cov_matrices = dlply(dentus, .(species), function(x) cov(x[,1:4]))
 
 # Filogenia
 if(!require(ape)){install.packages("ape"); library(ape)}
-TREE <- "(E:3,((C:1,B:1):1,(D:1, A:1):1):1):1;"
+TREE <- "(E:3,((D:1,B:1):1,(C:1, A:1):1):1);"
 tree <- read.tree(text = TREE)
-tree$tip.label = c("E", "C", "B", "D", "A")
-tree$node.label = c("root", "ABCD", "CB", "AD")
+tree$tip.label = c("E", "D", "B", "C", "A")
+tree$node.label = c("root", "ABCD", "DB", "AC")
 
 # Matrizes ancestrais
 all_cov_matrices = PhyloW(tree, cov_matrices)
@@ -278,7 +278,7 @@ dentus_ancestral = sapply(dentus_means[2:5], function(x) {
   ace(x, tree)$ace
 })
 
-dentus_ancestral = data.frame(species = c("root", "ABCD", "CB", "AD"), dentus_ancestral)
+dentus_ancestral = data.frame(species = c("root", "ABCD", "DB", "AC"), dentus_ancestral)
 dentus_means_ace = rbind(dentus_means, dentus_ancestral)
 all_means = dlply(dentus_means_ace, .(species), numcolwise(identity))
 ```
@@ -319,18 +319,18 @@ Ou salvar em um arquivo:
 write.csv(deltaZ_table, "meu_arquivo_de_deltaZs.csv")
 ```
 
-Agora temos os $\Delta z$ e as matrizes, podemos estimar os $\beta$ ao longo da filogenia. Por exemplo, o $\beta$ no ramo C-CB:
+Agora temos os $\Delta z$ e as matrizes, podemos estimar os $\beta$ ao longo da filogenia. Por exemplo, o $\beta$ no ramo B-DB:
 
 ```{r}
-beta_C_CB = solve(all_cov_matrices$CB, delta_Zs$C)
-beta_C_CB
+beta_B_DB = solve(all_cov_matrices$DB, delta_Zs$B)
+beta_B_DB
 ```
 
-Ou seja, aumento dos membros anteriores e diminuição dos posteriores. Vamos agora tentar entender o que esse $\beta$ significa.
+Ou seja, diminuição da ulna e aumento de femur e tibia. Vamos agora tentar entender o que esse $\beta$ significa.
 
 ## Comparação de $\Delta z$ e $\beta$
 
-Usando a espécie C como exemplo, vamos usar a correlação de vetores para interpretar a história evolutiva dessa espécie. Primeiro vamos definir a função de correlação de vetores:
+Usando a espécie B como exemplo, vamos usar a correlação de vetores para interpretar a história evolutiva dessa espécie. Primeiro vamos definir a função de correlação de vetores:
 
 ```{r}
 # Vamos usar funçòes do R e do evolqg para fazer isso em uma linha
@@ -341,27 +341,27 @@ Temos duas comparações importantes a serem feitas: (1) entre a mudança evolut
 
 ```{r}
 # Auto decomposição da matriz
-eigCB = eigen(all_cov_matrices$CB)
+eigDB = eigen(all_cov_matrices$DB)
 
 # Variancia explicada por cada PC:
-eigCB$values / sum(eigCB$values) * 100
+eigDB$values / sum(eigDB$values) * 100
 
 # Primeiro e segundo PCs
-PC1_CB = eigCB$vectors[,1]
-PC2_CB = eigCB$vectors[,2]
+PC1_DB = eigDB$vectors[,1]
+PC2_DB = eigDB$vectors[,2]
 
 # Correlação entre PCs e deltaZ
 # Nos usamos a funçao abs (valor absoluto) aqui pq o sinal de uma correlação com um PC não interessa.
 # Isso pq PCs são direções e não sentidos.
-abs(corVector(delta_Zs$C, PC1_CB))
-abs(corVector(delta_Zs$C, PC2_CB))
+abs(corVector(delta_Zs$B, PC1_DB))
+abs(corVector(delta_Zs$B, PC2_DB))
 
 # Correlação entre beta e delta Z.
 # Aqui o sinal da correlação interessa
 # correlações negativas indicam seleção pra um lado e resposta pro outro.
-corVector(delta_Zs$C, beta_C_CB)
+corVector(delta_Zs$B, beta_B_DB)
 ```
 
-Então, ficamos assim: correlações baixas entre $\Delta z$ e os primeiros componentes (0.07 e 0.58), mesmo eles explicando conjuntamente 75\% (52 + 23) da variação total. Isso exclui a hipótese de restrição evolutiva. Mas, quando olhamos a correlação entre seleção e resposta, temos uma correlação de 0.97, indicando que a diversificação da espécie C se deu de forma alinhada com a seleção (e não seguindo a linha de menor resistência, como vimos com a correlação de 0.07 com o PC1). Sabemos também que a seleção foi para aumentar os membros anteriores e diminuir os posteriores. Será que o habito de vida dessa espécie pode trazer alguma pista?
+Então, ficamos assim: correlação relativamente baixa entre $\Delta z$ e o primeiro componente. Isso  exclui a hipótese de restrição evolutiva. Mas, quando olhamos a correlação entre a seleção e a resposta, temos uma correlação de 0.90, indicando que a diversificação da espécie C se deu de forma alinhada com a seleção (e não seguindo a linha de menor resistência evolutiva). Será que o habito de vida dessa espécie pode trazer alguma pista?
 
-Agora, faça essa análise para todas as espécies e nós internos.
+Agora, faça essa análise para todas as espécies e nós internos. 
