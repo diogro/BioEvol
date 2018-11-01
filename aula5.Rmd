@@ -193,3 +193,48 @@ corVector(PC1_B, PC1_W)
 ```
 
 O que essa correlação te diz sobre a variação entre e dentro de grupos? Quais processos evolutivos poderiam ter levado a isso?
+
+Notem que nós computamos as matrizes dentro ($\mathbf{W}$) dos grupos e entre os grupos ($\mathbf{B}$) e extraímos o primeiro componente principal de $\mathbf{W}$ e $\mathbf{B}$. Depois correlacionamos (correlação de vetores) os primeiros componentes principais dessas matrizes para avaliar se a orientação estava alinhada na mesma direção ou não. Isso nos dá uma idéia sobre a orientação ou direção. Há um fator importante aqui a ser considerado: O quanto teve de dispersão para sabermos de fato se foi ou não deriva? Além da orientação, podemos também investigar a proporcionalidade. 
+
+Então vamos tirar o PC1 e PC2 da matriz dentro dos grupos ($\mathbf{W}$) e o PC1 e PC2 da matriz entre grupos ($\mathbf{B}$) e olhar para o tamanho desses vetores para avaliar a proporcionalidade. Vamos dividir o autovalor entre grupos do PC1 pelo autovalor do PC1 dentro dos grupos. Vamos fazer o mesmo para o segundo autovalor. Conhecendo os autovalores desses PCs podemos calcular uma taxa entre eles e essas taxas deverão ser mais ou menos proporcionais se for deriva. Então não somente os PCs devem estar alinhados, como a quantidade de dispersão deverá ser proporcional (essa é a expectativa de deriva). Se não for proporcional, ou seja, se tivermos muito mais divergência no primeiro componente principal do que o esperado, deve ser seleção. Essa é uma maneira complementar e intuitiva de avaliarmos a hipótese nula de deriva. Então estamos olhando tanto para a orientação da divergência quanto para a variação dentro das populações. E além disso estamos olhando para o quanto de evolução teve e se essa evolução foi proporcional a variação dentro das populações.
+
+Então vamos lá!
+
+```{r}
+# extraindo o PC1 de B e PC1 de W
+PC1_B_vec = eigen(B)$vectors[,1]
+PC1_W_vec = eigen(W)$vectors[,1]
+
+# correlacionando o primeiro autovetor de B e W
+corVector(PC1_B_vec, PC1_W_vec) 
+```
+
+
+```{r}
+# extraindo o primeiro autovalor de B e W
+PC1_B_val = eigen(B)$values[1] 
+PC1_W_val = eigen(W)$values[1] 
+```
+
+```{r}
+# extraindo o segundo autovalor de B e W
+PC2_B_val = eigen(B)$values[2] 
+PC2_W_val = eigen(W)$values[2] 
+```
+
+```{r}
+# calculando a razão entre o primeiro autovalor de B e de W
+PC1_B_val/PC1_W_val
+```
+
+```{r}
+# calculando a razão entre o segundo autovalor de B e de W
+PC2_B_val/PC2_W_val  
+```
+
+A proporcionalidade foi mantida? Baseado nos resultados sobre orientação e proporcionalidade, você rejeita ou não a hipótese nula de deriva?
+
+
+
+
+

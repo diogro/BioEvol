@@ -417,6 +417,29 @@ corVector =<span class="st"> </span><span class="cf">function</span>(x, y) <span
 <span class="kw">corVector</span>(PC1_B, PC1_W)</code></pre></div>
 <pre><code>## [1] 0.9502795</code></pre>
 <p>O que essa correlação te diz sobre a variação entre e dentro de grupos? Quais processos evolutivos poderiam ter levado a isso?</p>
+<p>Notem que nós computamos as matrizes dentro (<span class="math inline">\(\mathbf{W}\)</span>) dos grupos e entre os grupos (<span class="math inline">\(\mathbf{B}\)</span>) e extraímos o primeiro componente principal de <span class="math inline">\(\mathbf{W}\)</span> e <span class="math inline">\(\mathbf{B}\)</span>. Depois correlacionamos (correlação de vetores) os primeiros componentes principais dessas matrizes para avaliar se a orientação estava alinhada na mesma direção ou não. Isso nos dá uma idéia sobre a orientação ou direção. Há um fator importante aqui a ser considerado: O quanto teve de dispersão para sabermos de fato se foi ou não deriva? Além da orientação, podemos também investigar a proporcionalidade.</p>
+<p>Então vamos tirar o PC1 e PC2 da matriz dentro dos grupos (<span class="math inline">\(\mathbf{W}\)</span>) e o PC1 e PC2 da matriz entre grupos (<span class="math inline">\(\mathbf{B}\)</span>) e olhar para o tamanho desses vetores para avaliar a proporcionalidade. Vamos dividir o autovalor entre grupos do PC1 pelo autovalor do PC1 dentro dos grupos. Vamos fazer o mesmo para o segundo autovalor. Conhecendo os autovalores desses PCs podemos calcular uma taxa entre eles e essas taxas deverão ser mais ou menos proporcionais se for deriva. Então não somente os PCs devem estar alinhados, como a quantidade de dispersão deverá ser proporcional (essa é a expectativa de deriva). Se não for proporcional, ou seja, se tivermos muito mais divergência no primeiro componente principal do que o esperado, deve ser seleção. Essa é uma maneira complementar e intuitiva de avaliarmos a hipótese nula de deriva. Então estamos olhando tanto para a orientação da divergência quanto para a variação dentro das populações. E além disso estamos olhando para o quanto de evolução teve e se essa evolução foi proporcional a variação dentro das populações.</p>
+<p>Então vamos lá!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># extraindo o PC1 de B e PC1 de W</span>
+PC1_B_vec =<span class="st"> </span><span class="kw">eigen</span>(B)<span class="op">$</span>vectors[,<span class="dv">1</span>]
+PC1_W_vec =<span class="st"> </span><span class="kw">eigen</span>(W)<span class="op">$</span>vectors[,<span class="dv">1</span>]
+
+<span class="co"># correlacionando o primeiro autovetor de B e W</span>
+<span class="kw">corVector</span>(PC1_B_vec, PC1_W_vec) </code></pre></div>
+<pre><code>## [1] 0.9502795</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># extraindo o primeiro autovalor de B e W</span>
+PC1_B_val =<span class="st"> </span><span class="kw">eigen</span>(B)<span class="op">$</span>values[<span class="dv">1</span>] 
+PC1_W_val =<span class="st"> </span><span class="kw">eigen</span>(W)<span class="op">$</span>values[<span class="dv">1</span>] </code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># extraindo o segundo autovalor de B e W</span>
+PC2_B_val =<span class="st"> </span><span class="kw">eigen</span>(B)<span class="op">$</span>values[<span class="dv">2</span>] 
+PC2_W_val =<span class="st"> </span><span class="kw">eigen</span>(W)<span class="op">$</span>values[<span class="dv">2</span>] </code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculando a razão entre o primeiro autovalor de B e de W</span>
+PC1_B_val<span class="op">/</span>PC1_W_val</code></pre></div>
+<pre><code>## [1] 34.37799</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculando a razão entre o segundo autovalor de B e de W</span>
+PC2_B_val<span class="op">/</span>PC2_W_val  </code></pre></div>
+<pre><code>## [1] 4.954656</code></pre>
+<p>A proporcionalidade foi mantida? Baseado nos resultados sobre orientação e proporcionalidade, você rejeita ou não a hipótese nula de deriva?</p>
 </div>
 </div>
 
