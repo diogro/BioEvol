@@ -1,0 +1,284 @@
+---
+title: "Biologia Evolutiva"
+subtitle: Análise de Variância - ANOVA
+author: "Daniela M. Rossoni"
+date: "17 de Outubro de 2018"
+output:
+  html_document:
+    highlight: tango
+    number_sections: yes
+    theme: flatly
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: no
+  pdf_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Leitura da Aula 
+
+- [Modularity: Genes, Development, and Evolution](https://www.annualreviews.org/doi/full/10.1146/annurev-ecolsys-121415-032409)
+([pdf](https://github.com/lem-usp/site-bio208/raw/master/static/pdfs/artigos/Melo et al. 2016 - Modularity - Genes, Development, and Evolution.pdf))
+
+    __Abstract:__
+    Modularity has emerged as a central concept for evolutionary biology, 
+    thereby providing the field with a theory of organismal structure and variation.
+    This theory has reframed long-standing questions and serves as a unified
+    conceptual framework for genetics, developmental biology, and multivariate
+    evolution. Research programs in systems biology and quantitative genetics
+    are bridging the gap between these fields. Although this synthesis is ongoing,
+    some major themes have emerged, and empirical evidence for modularity has become abundant. In this review, we look at modularity from a historical perspective, highlighting its meaning at different levels of biological organization and the different methods that can be used to detect it. We then explore the relationship between quantitative genetic approaches to modularity and developmental genetic studies. We conclude by investigating the dynamic relationship between modularity and the adaptive landscape and how this relationship potentially shapes evolution and can help bridge the gap between micro- and macroevolution.
+
+
+# Objetivo
+
+Compreender a utilização de uma Análise de Variância e o passo a passo de sua implementação.
+
+# Banco de Dados: Morcegos!
+
+Nós coletamos em campo 90 indivíduos de morcegos e obtivemos as seguintes informações:
+
+1. comprimento do antebraço;
+2. massa corporal;
+3. sexo.
+
+A amostra coletada está dividida em três subespécies: uma que ocorre no bioma Amazônia,
+outra no Cerrado, e a última da Mata Atlântica.
+
+```{r packagesfake, eval = FALSE}
+# Lendo o conjunto de dados que vamos utilizar
+Bats = read.csv("Bats.csv")
+
+# Estabelecendo os nomes das colunas (variávies)
+names(Bats) = c("subespecies", "comp_antebraco", "peso", "sexo")
+```
+
+Carregando as primeiras linhas do conjunto de dados que vamos utilizar
+
+```{r, eval = FALSE}
+head(Bats)
+```
+
+Olhando a estrutura desse conjunto de dados
+```{r, eval = FALSE}
+str(Bats)
+```
+
+# Explorando os dados visualmente
+
+Vamos explorar os dados fazendo um boxplot da relação entre o 
+comprimento do antebraço e as subespécies presentes nos biomas Amazonia, 
+Cerrado e Pantanal. 
+
+Note que com isso queremos inspecionar se o comprimento do antebraço varia entre as diferentes subespécies. Ou, em outras palavras, estamos nos questionando: será que há diferença entre as subspécies no que diz respeito ao comprimento de seus antebraços? 
+
+```{r, eval = FALSE}
+require (ggplot2)
+ggplot(Bats, aes(subespecies, comp_antebraco, fill = subespecies)) +
+theme_bw()+ geom_boxplot() 
+```
+__Perguntas para serem discutidas a partir do gráfico acima:__
+
+1. Quais conclusões que você obteve deste gráfico? 
+
+2. Qual é a variável dependente (resposta) e independente (preditora) avaliadas no boxplot acima?
+
+3. Qual é a variável contínua ou quantitativa?
+
+4. Qual é a variável categórica ou discreta?
+
+Note que, visualmente, o boxplot indica um efeito da subespécie no comprimento do antebraço. 
+
+__Mas, será que essa diferença é real ou apenas um efeito do acaso?__
+
+# Análise de Variância passo a passo
+
+Aqui nós vamos investigar o efeito de uma variável categórica (preditora - x) sobre a variação de uma variável contínua (resposta - y). 
+A nossa questão é a seguinte:
+
+__O comprimento do antebraço varia entre as diferentes subespécies de morcegos?__
+
+Mas antes de fazermos a ANOVA descreva: 
+
+1. Qual a hipótese nula?
+
+2. Qual a hipotése alternativa?
+
+# A Grande Média
+
+```{r, eval = FALSE}
+require(plyr)
+
+compr.antebraco = data.frame (AM = Bats[1:30,2], CE=Bats[31:60,2], MA = Bats[61:90,2])
+
+media.compr.antebraco = apply (compr.antebraco, 2, mean)
+
+grande.media = mean(media.compr.antebraco)
+
+grande.media
+```
+
+# A Soma dos Quadrados Total (SQT)
+
+A Soma dos Quadarados Total é uma estimativa de quanto o conjunto de dados (todos os grupos) varia em relacao à grande media.
+
+O cálculo é simples: 
+
+Temos que somar as distâncias dos dados de todos os grupos e a grande media, elevado ao quadrado.
+
+```{r, eval = FALSE}
+
+diff.total = asas - grande.media
+
+diff.total.quad = diff.total^2
+
+SQT = sum(diff.total.quad)
+
+SQT 
+```
+
+Graus de liberdade: 
+
+```{r, eval = FALSE}
+(m*n)-1 m [n de grupos] vezes n [de cada grupo = 30] - 1: 
+(3 * 30) - 1 = 89
+```
+
+Se nós dividirmos 7541.426 (SQT) por 89 (graus de liberdade) vamos ter a variância para toda a amostra!
+        
+Nós vimos na aula teórica sobre ANOVA que a soma dos quadrados total é igual a soma dos quadrados dentro e entre grupos:
+
+__SQT = SQ Dentro + SQ Entre__ 
+
+Nós sabemos que a variação total (SQT) é 7541.426. 
+
+Então a próxima pergunta que devemos fazer é:
+
+__O quanto dessa variação total se refere à variação entre e dentros dos grupos?__ 
+
+
+# A Soma dos Quadrados Dentro dos Grupos (SQD)
+
+Para obter o valor da soma dos quadradosdentro dos grupos, nós vamos somar as distâncias de cada medida de comprimento de antebraço para sua respectiva média (média de cada subespécie: AM, CE ou MA), elevado ao quadrado.
+
+```{r, eval = FALSE}
+compr.antebraco # data.frame com os comprimentos de antebraço para cada subespécie
+
+media.compr.antebraco # média do comprimento do antebraço para cada subespécie
+
+
+sq.compr.antebraco.AM = sum(compr.antebraco["AM"]-media.compr.antebraco["AM"])^2)
+
+sq.compr.antebraco.AM
+
+
+sq.compr.antebraco.CE = sum((compr.antebraco["CE"]-media.compr.antebraco["CE"])^2)
+
+sq.compr.antebraco.CE
+
+
+sq.compr.antebraco.MA = sum((compr.antebraco["MA"]-media.compr.antebraco["MA"])^2)
+
+sq.compr.antebraco.MA
+
+
+SQD = sum(compr.antebraco.AM,compr.antebraco.CE,compr.antebraco.MA)
+
+SQD 
+```
+
+```{r, eval = FALSE}
+Graus de liberdade: m(n-1) = 3(30 - 1): 3 * 29 = 87
+```
+
+De 7541.426 da variaçao total, 600.0006 se deve a soma dos quadrados dentro dos grupos. Esperamos, então que X sejam da varição entre grupos. O próximo passo é calcularmos a Soma dos Quadrados Entre os grupos (SQE)
+
+# Soma dos Quadrados Entre os grupos (SQE)
+
+Vamos estimar quanto dessa variação se deve a variação entre essas médias.
+
+Para cada medida do comprimento do antebraço, vamos calcular a distância ao quadrado 
+entre a média da subespécie e a média das médias.
+
+```{r, eval = FALSE}
+media.compr.antebraco # média do comprimento dao antebraço para cada subespécie
+
+grande.media
+
+SQE.AM = 30*(media.compr.antebraco["AM"] - grande.media)^2
+
+SQE.CE = 30*(media.compr.antebraco["CE"] - grande.media)^2
+
+SQE.MA = 30*(media.compr.antebraco["MA"] - grande.media)^2
+
+SQE = c(SQE.AM + SQE.CE + SQE.MA)
+
+SQE
+``` 
+
+Ou, simplesmente:
+
+```{r, eval = FALSE}
+SQE_simples = sum(30*(media.asas - grande.media)^2)
+
+SQE_simples + SQD # veja se o total é igual ao valor de SQT
+```
+
+Graus de liberdade: (m-1): 2
+
+Variação total (SQT) = variçao dentro dos grupos (SQD) + variaçao entre grupos (SQE).
+
+Some os objetos SQD e SQE e confira o resultado com o valor do objeto SQT.
+
+Agora, some tambem os graus de liberdade de SQD e SQE e veja se é igual ao valor de gruas de liberdade de SQT.
+
+
+# Cálculo do F de Fisher
+
+Vamos agora calcular a estatística F. Ela é definida como a razao entre SQE/g.l (desvio medio) e SDQ/g.l (desvio medio).
+
+```{r, eval = FALSE}
+mq.entre = SQE/2
+
+mq.dentro = SQD/87
+
+mq.entre
+
+mq.dentro
+
+F.compr.antebraco = mq.entre/mq.dentro
+
+F.compr.antebraco
+```
+
+# Cálculo do P
+
+Dica: faça uma busca no help do R para saber o que a função pf faz!
+
+```{r, eval = FALSE}
+p.compr.antebraco = pf (F.compr.antebraco,2, 87, lower.tail=FALSE)
+
+p.compr.antebraco
+```
+
+__Pergunta:__
+
+Vc rejeitou ou aceitou sua hipótese nula? Subespécies diferentes de morcegos tem comprimentos de antebraço diferentes?
+
+
+Agora faça novamente a anova no R. Dessa vez, use a funçao aov e depois use o summary para verificar os resultados? Não esqueça de olhar o help da função aov!
+
+```{r, eval = FALSE}
+test.anova = aov (compr.antebraco ~ subespecies, data=Bats)
+summary(test.anova)
+```
+
+__Para discussao:__
+
+Existe um efeito do sexo tambem? Faz sentido tesar o efeito de sexo separando por
+subespécie ou com tudo junto?
