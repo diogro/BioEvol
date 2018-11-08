@@ -442,6 +442,8 @@ p.compr.antebraco</code></pre></div>
 <p><strong>Pergunta:</strong></p>
 <p>Vc rejeitou ou aceitou sua hipótese nula? Subespécies diferentes de morcegos tem comprimentos de antebraço diferentes?</p>
 <p>Agora faça novamente a anova no R. Dessa vez, use a funçao aov e depois use o summary para verificar os resultados? Não esqueça de olhar o help da função aov!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.anova =<span class="st"> </span><span class="kw">aov</span> (Bats[,<span class="dv">2</span>] <span class="op">~</span><span class="st"> </span>Bats[,<span class="dv">1</span>])
+<span class="kw">summary</span>(test.anova)</code></pre></div>
 <p><strong>Para discussao:</strong></p>
 <p>Existe um efeito do sexo tambem? Faz sentido testar o efeito de sexo separando por subespécie ou com tudo junto?</p>
 </div>

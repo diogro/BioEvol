@@ -292,6 +292,10 @@ Vc rejeitou ou aceitou sua hipótese nula? Subespécies diferentes de morcegos t
 
 Agora faça novamente a anova no R. Dessa vez, use a funçao aov e depois use o summary para verificar os resultados? Não esqueça de olhar o help da função aov!
 
+```{r, eval = FALSE}
+test.anova = aov (Bats[,2] ~ Bats[,1])
+summary(test.anova)
+```
 
 __Para discussao:__
 
