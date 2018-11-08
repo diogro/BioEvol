@@ -51,11 +51,36 @@ A amostra coletada está dividida em três subespécies: uma que ocorre no bioma
 outra no Cerrado, e a última da Mata Atlântica.
 
 ```{r packagesfake, eval = FALSE}
-# Lendo o conjunto de dados que vamos utilizar
-Bats = read.csv("Bats.csv")
+# Gerando os dados
+set.seed (4)
+Bats.Amazonia.machos = round (rnorm(15, 5, 1),2)
+Bats.Amazonia.femeas = round (rnorm(15, 10, 1),2)
+Bats.Cerrado.machos = round (rnorm(15, 25, 1),2)
+Bats.Cerrado.femeas = round (rnorm(15, 30, 1),2)
+Bats.MataAtlantica.machos = round (rnorm(15, 12, 1),2)
+Bats.MataAtlantica.femeas = round (rnorm(15, 8, 1),2)
+massa.macho = round (rnorm(45, 17, 1),2)
+massa.femea = round (rnorm(45, 13, 1),2)
+Bats = data.frame (c(rep("AM",30), rep("CE",30),rep("MA",30)), 
+                   c(Bats.Amazonia.machos, Bats.Amazonia.femeas, 
+                     Bats.Cerrado.machos, Bats.Cerrado.femeas, 
+                     Bats.MataAtlantica.machos, Bats.MataAtlantica.femeas),
+                   c(massa.macho,massa.femea), c(rep(c("M","F"),  each = 15), 
+                    rep(c("M","F"),  each = 15), rep(c("M","F"),  each = 15)))
+names(Bats) = c("subespecies", "comp_antebraco", "peso", "sexo")
+```
+
+```{r, eval = FALSE}
+# Você pode salvar o conjunto de dados como extensão .csv para ler mais tarde
+# write.csv (Bats, file = "Bats.csv")
+```
+
+```{r,, eval = FALSE}
+# Se quiser abrir mais tarde a planilha salva, use a função read.csv
+# Bats = read.csv("Bats.csv")
 
 # Estabelecendo os nomes das colunas (variávies)
-names(Bats) = c("subespecies", "comp_antebraco", "peso", "sexo")
+# names(Bats) = c("subespecies", "comp_antebraco", "peso", "sexo")
 ```
 
 Carregando as primeiras linhas do conjunto de dados que vamos utilizar
@@ -79,6 +104,11 @@ Note que com isso queremos inspecionar se o comprimento do antebraço varia entr
 
 ```{r, eval = FALSE}
 require (ggplot2)
+library(evolqg)
+library(ggplot2)
+library(GGally)
+library(reshape2)
+
 ggplot(Bats, aes(subespecies, comp_antebraco, fill = subespecies)) +
 theme_bw()+ geom_boxplot() 
 ```
@@ -119,7 +149,6 @@ compr.antebraco = data.frame (AM = Bats[1:30,2], CE=Bats[31:60,2], MA = Bats[61:
 media.compr.antebraco = apply (compr.antebraco, 2, mean)
 
 grande.media = mean(media.compr.antebraco)
-
 grande.media
 ```
 
@@ -138,15 +167,15 @@ diff.total = asas - grande.media
 diff.total.quad = diff.total^2
 
 SQT = sum(diff.total.quad)
-
 SQT 
 ```
 
 Graus de liberdade: 
 
 ```{r, eval = FALSE}
-(m*n)-1 m [n de grupos] vezes n [de cada grupo = 30] - 1: 
-(3 * 30) - 1 = 89
+# número de grupos (3) vezes o número de cada grupo (30) menos 1
+(m*n)-1 
+# (3 * 30) - 1 = 89
 ```
 
 Se nós dividirmos 7541.426 (SQT) por 89 (graus de liberdade) vamos ter a variância para toda a amostra!
@@ -164,39 +193,32 @@ __O quanto dessa variação total se refere à variação entre e dentros dos gr
 
 # A Soma dos Quadrados Dentro dos Grupos (SQD)
 
-Para obter o valor da soma dos quadradosdentro dos grupos, nós vamos somar as distâncias de cada medida de comprimento de antebraço para sua respectiva média (média de cada subespécie: AM, CE ou MA), elevado ao quadrado.
+Para obter o valor da soma dos quadrados dentro dos grupos, nós vamos somar as distâncias de cada medida de comprimento de antebraço para sua respectiva média (média de cada subespécie: AM, CE ou MA), elevado ao quadrado.
 
 ```{r, eval = FALSE}
 compr.antebraco # data.frame com os comprimentos de antebraço para cada subespécie
 
 media.compr.antebraco # média do comprimento do antebraço para cada subespécie
 
-
 sq.compr.antebraco.AM = sum(compr.antebraco["AM"]-media.compr.antebraco["AM"])^2)
-
 sq.compr.antebraco.AM
 
-
 sq.compr.antebraco.CE = sum((compr.antebraco["CE"]-media.compr.antebraco["CE"])^2)
-
 sq.compr.antebraco.CE
 
-
 sq.compr.antebraco.MA = sum((compr.antebraco["MA"]-media.compr.antebraco["MA"])^2)
-
 sq.compr.antebraco.MA
 
-
 SQD = sum(compr.antebraco.AM,compr.antebraco.CE,compr.antebraco.MA)
-
 SQD 
 ```
 
 ```{r, eval = FALSE}
-Graus de liberdade: m(n-1) = 3(30 - 1): 3 * 29 = 87
+# Graus de liberdade: 
+# m(n-1) = 3(30 - 1): 3 * 29 = 87
 ```
 
-De 7541.426 da variaçao total, 600.0006 se deve a soma dos quadrados dentro dos grupos. Esperamos, então que X sejam da varição entre grupos. O próximo passo é calcularmos a Soma dos Quadrados Entre os grupos (SQE)
+De 7541.426 da variaçao total, 600.0006 se deve a soma dos quadrados dentro dos grupos. Esperamos então que X seja da varição entre grupos. O próximo passo é calcularmos a Soma dos Quadrados Entre os grupos (SQE)
 
 # Soma dos Quadrados Entre os grupos (SQE)
 
@@ -217,7 +239,6 @@ SQE.CE = 30*(media.compr.antebraco["CE"] - grande.media)^2
 SQE.MA = 30*(media.compr.antebraco["MA"] - grande.media)^2
 
 SQE = c(SQE.AM + SQE.CE + SQE.MA)
-
 SQE
 ``` 
 
@@ -235,12 +256,12 @@ Variação total (SQT) = variçao dentro dos grupos (SQD) + variaçao entre grup
 
 Some os objetos SQD e SQE e confira o resultado com o valor do objeto SQT.
 
-Agora, some tambem os graus de liberdade de SQD e SQE e veja se é igual ao valor de gruas de liberdade de SQT.
+Agora, some também os graus de liberdade de SQD e SQE e veja se é igual ao valor de graus de liberdade de SQT.
 
 
 # Cálculo do F de Fisher
 
-Vamos agora calcular a estatística F. Ela é definida como a razao entre SQE/g.l (desvio medio) e SDQ/g.l (desvio medio).
+Vamos agora calcular a estatística F. Ela é definida como sendo a razão entre SQE/g.l (desvio medio) e SDQ/g.l (desvio medio).
 
 ```{r, eval = FALSE}
 mq.entre = SQE/2
@@ -252,7 +273,6 @@ mq.entre
 mq.dentro
 
 F.compr.antebraco = mq.entre/mq.dentro
-
 F.compr.antebraco
 ```
 
@@ -262,7 +282,6 @@ Dica: faça uma busca no help do R para saber o que a função pf faz!
 
 ```{r, eval = FALSE}
 p.compr.antebraco = pf (F.compr.antebraco,2, 87, lower.tail=FALSE)
-
 p.compr.antebraco
 ```
 

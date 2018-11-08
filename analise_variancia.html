@@ -279,11 +279,30 @@ div.tocify {
 <li>sexo.</li>
 </ol>
 <p>A amostra coletada está dividida em três subespécies: uma que ocorre no bioma Amazônia, outra no Cerrado, e a última da Mata Atlântica.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Lendo o conjunto de dados que vamos utilizar</span>
-Bats =<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;Bats.csv&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Gerando os dados</span>
+<span class="kw">set.seed</span> (<span class="dv">4</span>)
+Bats.Amazonia.machos =<span class="st"> </span><span class="kw">round</span> (<span class="kw">rnorm</span>(<span class="dv">15</span>, <span class="dv">5</span>, <span class="dv">1</span>),<span class="dv">2</span>)
+Bats.Amazonia.femeas =<span class="st"> </span><span class="kw">round</span> (<span class="kw">rnorm</span>(<span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">1</span>),<span class="dv">2</span>)
+Bats.Cerrado.machos =<span class="st"> </span><span class="kw">round</span> (<span class="kw">rnorm</span>(<span class="dv">15</span>, <span class="dv">25</span>, <span class="dv">1</span>),<span class="dv">2</span>)
+Bats.Cerrado.femeas =<span class="st"> </span><span class="kw">round</span> (<span class="kw">rnorm</span>(<span class="dv">15</span>, <span class="dv">30</span>, <span class="dv">1</span>),<span class="dv">2</span>)
+Bats.MataAtlantica.machos =<span class="st"> </span><span class="kw">round</span> (<span class="kw">rnorm</span>(<span class="dv">15</span>, <span class="dv">12</span>, <span class="dv">1</span>),<span class="dv">2</span>)
+Bats.MataAtlantica.femeas =<span class="st"> </span><span class="kw">round</span> (<span class="kw">rnorm</span>(<span class="dv">15</span>, <span class="dv">8</span>, <span class="dv">1</span>),<span class="dv">2</span>)
+massa.macho =<span class="st"> </span><span class="kw">round</span> (<span class="kw">rnorm</span>(<span class="dv">45</span>, <span class="dv">17</span>, <span class="dv">1</span>),<span class="dv">2</span>)
+massa.femea =<span class="st"> </span><span class="kw">round</span> (<span class="kw">rnorm</span>(<span class="dv">45</span>, <span class="dv">13</span>, <span class="dv">1</span>),<span class="dv">2</span>)
+Bats =<span class="st"> </span><span class="kw">data.frame</span> (<span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;AM&quot;</span>,<span class="dv">30</span>), <span class="kw">rep</span>(<span class="st">&quot;CE&quot;</span>,<span class="dv">30</span>),<span class="kw">rep</span>(<span class="st">&quot;MA&quot;</span>,<span class="dv">30</span>)), 
+                   <span class="kw">c</span>(Bats.Amazonia.machos, Bats.Amazonia.femeas, 
+                     Bats.Cerrado.machos, Bats.Cerrado.femeas, 
+                     Bats.MataAtlantica.machos, Bats.MataAtlantica.femeas),
+                   <span class="kw">c</span>(massa.macho,massa.femea), <span class="kw">c</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;M&quot;</span>,<span class="st">&quot;F&quot;</span>),  <span class="dt">each =</span> <span class="dv">15</span>), 
+                    <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;M&quot;</span>,<span class="st">&quot;F&quot;</span>),  <span class="dt">each =</span> <span class="dv">15</span>), <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;M&quot;</span>,<span class="st">&quot;F&quot;</span>),  <span class="dt">each =</span> <span class="dv">15</span>)))
+<span class="kw">names</span>(Bats) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;subespecies&quot;</span>, <span class="st">&quot;comp_antebraco&quot;</span>, <span class="st">&quot;peso&quot;</span>, <span class="st">&quot;sexo&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Você pode salvar o conjunto de dados como extensão .csv para ler mais tarde</span>
+<span class="co"># write.csv (Bats, file = &quot;Bats.csv&quot;)</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Se quiser abrir mais tarde a planilha salva, use a função read.csv</span>
+<span class="co"># Bats = read.csv(&quot;Bats.csv&quot;)</span>
 
 <span class="co"># Estabelecendo os nomes das colunas (variávies)</span>
-<span class="kw">names</span>(Bats) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;subespecies&quot;</span>, <span class="st">&quot;comp_antebraco&quot;</span>, <span class="st">&quot;peso&quot;</span>, <span class="st">&quot;sexo&quot;</span>)</code></pre></div>
+<span class="co"># names(Bats) = c(&quot;subespecies&quot;, &quot;comp_antebraco&quot;, &quot;peso&quot;, &quot;sexo&quot;)</span></code></pre></div>
 <p>Carregando as primeiras linhas do conjunto de dados que vamos utilizar</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(Bats)</code></pre></div>
 <p>Olhando a estrutura desse conjunto de dados</p>
@@ -294,6 +313,11 @@ Bats =<span class="st"> </span><span class="kw">read.csv</span>(<span class="st"
 <p>Vamos explorar os dados fazendo um boxplot da relação entre o comprimento do antebraço e as subespécies presentes nos biomas Amazonia, Cerrado e Pantanal.</p>
 <p>Note que com isso queremos inspecionar se o comprimento do antebraço varia entre as diferentes subespécies. Ou, em outras palavras, estamos nos questionando: será que há diferença entre as subspécies no que diz respeito ao comprimento de seus antebraços?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span> (ggplot2)
+<span class="kw">library</span>(evolqg)
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(GGally)
+<span class="kw">library</span>(reshape2)
+
 <span class="kw">ggplot</span>(Bats, <span class="kw">aes</span>(subespecies, comp_antebraco, <span class="dt">fill =</span> subespecies)) <span class="op">+</span>
 <span class="kw">theme_bw</span>()<span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() </code></pre></div>
 <p><strong>Perguntas para serem discutidas a partir do gráfico acima:</strong></p>
@@ -325,7 +349,6 @@ compr.antebraco =<span class="st"> </span><span class="kw">data.frame</span> (<s
 media.compr.antebraco =<span class="st"> </span><span class="kw">apply</span> (compr.antebraco, <span class="dv">2</span>, mean)
 
 grande.media =<span class="st"> </span><span class="kw">mean</span>(media.compr.antebraco)
-
 grande.media</code></pre></div>
 </div>
 <div id="a-soma-dos-quadrados-total-sqt" class="section level1">
@@ -338,11 +361,11 @@ grande.media</code></pre></div>
 diff.total.quad =<span class="st"> </span>diff.total<span class="op">^</span><span class="dv">2</span>
 
 SQT =<span class="st"> </span><span class="kw">sum</span>(diff.total.quad)
-
 SQT </code></pre></div>
 <p>Graus de liberdade:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(m<span class="op">*</span>n)<span class="op">-</span><span class="dv">1</span> m [n de grupos] vezes n [de cada grupo =<span class="st"> </span><span class="dv">30</span>] <span class="op">-</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="st"> </span>
-(<span class="dv">3</span> <span class="op">*</span><span class="st"> </span><span class="dv">30</span>) <span class="op">-</span><span class="st"> </span><span class="dv">1</span> =<span class="st"> </span><span class="dv">89</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># número de grupos (3) vezes o número de cada grupo (30) menos 1</span>
+(m<span class="op">*</span>n)<span class="op">-</span><span class="dv">1</span> 
+<span class="co"># (3 * 30) - 1 = 89</span></code></pre></div>
 <p>Se nós dividirmos 7541.426 (SQT) por 89 (graus de liberdade) vamos ter a variância para toda a amostra!</p>
 <p>Nós vimos na aula teórica sobre ANOVA que a soma dos quadrados total é igual a soma dos quadrados dentro e entre grupos:</p>
 <p><strong>SQT = SQ Dentro + SQ Entre</strong></p>
@@ -352,32 +375,25 @@ SQT </code></pre></div>
 </div>
 <div id="a-soma-dos-quadrados-dentro-dos-grupos-sqd" class="section level1">
 <h1><span class="header-section-number">8</span> A Soma dos Quadrados Dentro dos Grupos (SQD)</h1>
-<p>Para obter o valor da soma dos quadradosdentro dos grupos, nós vamos somar as distâncias de cada medida de comprimento de antebraço para sua respectiva média (média de cada subespécie: AM, CE ou MA), elevado ao quadrado.</p>
+<p>Para obter o valor da soma dos quadrados dentro dos grupos, nós vamos somar as distâncias de cada medida de comprimento de antebraço para sua respectiva média (média de cada subespécie: AM, CE ou MA), elevado ao quadrado.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">compr.antebraco <span class="co"># data.frame com os comprimentos de antebraço para cada subespécie</span>
 
 media.compr.antebraco <span class="co"># média do comprimento do antebraço para cada subespécie</span>
 
-
 sq.compr.antebraco.AM =<span class="st"> </span><span class="kw">sum</span>(compr.antebraco[<span class="st">&quot;AM&quot;</span>]<span class="op">-</span>media.compr.antebraco[<span class="st">&quot;AM&quot;</span>])<span class="op">^</span><span class="dv">2</span><span class="er">)</span>
-
 sq.compr.antebraco.AM
 
-
 sq.compr.antebraco.CE =<span class="st"> </span><span class="kw">sum</span>((compr.antebraco[<span class="st">&quot;CE&quot;</span>]<span class="op">-</span>media.compr.antebraco[<span class="st">&quot;CE&quot;</span>])<span class="op">^</span><span class="dv">2</span>)
-
 sq.compr.antebraco.CE
 
-
 sq.compr.antebraco.MA =<span class="st"> </span><span class="kw">sum</span>((compr.antebraco[<span class="st">&quot;MA&quot;</span>]<span class="op">-</span>media.compr.antebraco[<span class="st">&quot;MA&quot;</span>])<span class="op">^</span><span class="dv">2</span>)
-
 sq.compr.antebraco.MA
 
-
 SQD =<span class="st"> </span><span class="kw">sum</span>(compr.antebraco.AM,compr.antebraco.CE,compr.antebraco.MA)
-
 SQD </code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Graus de liberdade<span class="op">:</span><span class="st"> </span><span class="kw">m</span>(n<span class="op">-</span><span class="dv">1</span>) =<span class="st"> </span><span class="dv">3</span>(<span class="dv">30</span> <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)<span class="op">:</span><span class="st"> </span><span class="dv">3</span> <span class="op">*</span><span class="st"> </span><span class="dv">29</span> =<span class="st"> </span><span class="dv">87</span></code></pre></div>
-<p>De 7541.426 da variaçao total, 600.0006 se deve a soma dos quadrados dentro dos grupos. Esperamos, então que X sejam da varição entre grupos. O próximo passo é calcularmos a Soma dos Quadrados Entre os grupos (SQE)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Graus de liberdade: </span>
+<span class="co"># m(n-1) = 3(30 - 1): 3 * 29 = 87</span></code></pre></div>
+<p>De 7541.426 da variaçao total, 600.0006 se deve a soma dos quadrados dentro dos grupos. Esperamos então que X seja da varição entre grupos. O próximo passo é calcularmos a Soma dos Quadrados Entre os grupos (SQE)</p>
 </div>
 <div id="soma-dos-quadrados-entre-os-grupos-sqe" class="section level1">
 <h1><span class="header-section-number">9</span> Soma dos Quadrados Entre os grupos (SQE)</h1>
@@ -394,7 +410,6 @@ SQE.CE =<span class="st"> </span><span class="dv">30</span><span class="op">*</s
 SQE.MA =<span class="st"> </span><span class="dv">30</span><span class="op">*</span>(media.compr.antebraco[<span class="st">&quot;MA&quot;</span>] <span class="op">-</span><span class="st"> </span>grande.media)<span class="op">^</span><span class="dv">2</span>
 
 SQE =<span class="st"> </span><span class="kw">c</span>(SQE.AM <span class="op">+</span><span class="st"> </span>SQE.CE <span class="op">+</span><span class="st"> </span>SQE.MA)
-
 SQE</code></pre></div>
 <p>Ou, simplesmente:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">SQE_simples =<span class="st"> </span><span class="kw">sum</span>(<span class="dv">30</span><span class="op">*</span>(media.asas <span class="op">-</span><span class="st"> </span>grande.media)<span class="op">^</span><span class="dv">2</span>)
@@ -403,11 +418,11 @@ SQE_simples <span class="op">+</span><span class="st"> </span>SQD <span class="c
 <p>Graus de liberdade: (m-1): 2</p>
 <p>Variação total (SQT) = variçao dentro dos grupos (SQD) + variaçao entre grupos (SQE).</p>
 <p>Some os objetos SQD e SQE e confira o resultado com o valor do objeto SQT.</p>
-<p>Agora, some tambem os graus de liberdade de SQD e SQE e veja se é igual ao valor de gruas de liberdade de SQT.</p>
+<p>Agora, some também os graus de liberdade de SQD e SQE e veja se é igual ao valor de graus de liberdade de SQT.</p>
 </div>
 <div id="calculo-do-f-de-fisher" class="section level1">
 <h1><span class="header-section-number">10</span> Cálculo do F de Fisher</h1>
-<p>Vamos agora calcular a estatística F. Ela é definida como a razao entre SQE/g.l (desvio medio) e SDQ/g.l (desvio medio).</p>
+<p>Vamos agora calcular a estatística F. Ela é definida como sendo a razão entre SQE/g.l (desvio medio) e SDQ/g.l (desvio medio).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mq.entre =<span class="st"> </span>SQE<span class="op">/</span><span class="dv">2</span>
 
 mq.dentro =<span class="st"> </span>SQD<span class="op">/</span><span class="dv">87</span>
@@ -417,14 +432,12 @@ mq.entre
 mq.dentro
 
 F.compr.antebraco =<span class="st"> </span>mq.entre<span class="op">/</span>mq.dentro
-
 F.compr.antebraco</code></pre></div>
 </div>
 <div id="calculo-do-p" class="section level1">
 <h1><span class="header-section-number">11</span> Cálculo do P</h1>
 <p>Dica: faça uma busca no help do R para saber o que a função pf faz!</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p.compr.antebraco =<span class="st"> </span><span class="kw">pf</span> (F.compr.antebraco,<span class="dv">2</span>, <span class="dv">87</span>, <span class="dt">lower.tail=</span><span class="ot">FALSE</span>)
-
 p.compr.antebraco</code></pre></div>
 <p><strong>Pergunta:</strong></p>
 <p>Vc rejeitou ou aceitou sua hipótese nula? Subespécies diferentes de morcegos tem comprimentos de antebraço diferentes?</p>
