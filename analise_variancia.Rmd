@@ -162,7 +162,7 @@ Temos que somar as distâncias dos dados de todos os grupos e a grande media, el
 
 ```{r, eval = FALSE}
 
-diff.total = asas - grande.media
+diff.total = compr.antebraco - grande.media
 
 diff.total.quad = diff.total^2
 
@@ -174,7 +174,7 @@ Graus de liberdade:
 
 ```{r, eval = FALSE}
 # número de grupos (3) vezes o número de cada grupo (30) menos 1
-(m*n)-1 
+# (m*n)-1 
 # (3 * 30) - 1 = 89
 ```
 
@@ -200,7 +200,7 @@ compr.antebraco # data.frame com os comprimentos de antebraço para cada subesp�
 
 media.compr.antebraco # média do comprimento do antebraço para cada subespécie
 
-sq.compr.antebraco.AM = sum(compr.antebraco["AM"]-media.compr.antebraco["AM"])^2)
+sq.compr.antebraco.AM = sum((compr.antebraco["AM"]-media.compr.antebraco["AM"])^2)
 sq.compr.antebraco.AM
 
 sq.compr.antebraco.CE = sum((compr.antebraco["CE"]-media.compr.antebraco["CE"])^2)
@@ -209,7 +209,7 @@ sq.compr.antebraco.CE
 sq.compr.antebraco.MA = sum((compr.antebraco["MA"]-media.compr.antebraco["MA"])^2)
 sq.compr.antebraco.MA
 
-SQD = sum(compr.antebraco.AM,compr.antebraco.CE,compr.antebraco.MA)
+SQD = sum(sq.compr.antebraco.AM, sq.compr.antebraco.CE, sq.compr.antebraco.MA)
 SQD 
 ```
 
@@ -245,7 +245,7 @@ SQE
 Ou, simplesmente:
 
 ```{r, eval = FALSE}
-SQE_simples = sum(30*(media.asas - grande.media)^2)
+SQE_simples = sum(30*(media.compr.antebraco - grande.media)^2)
 
 SQE_simples + SQD # veja se o total é igual ao valor de SQT
 ```
@@ -292,12 +292,8 @@ Vc rejeitou ou aceitou sua hipótese nula? Subespécies diferentes de morcegos t
 
 Agora faça novamente a anova no R. Dessa vez, use a funçao aov e depois use o summary para verificar os resultados? Não esqueça de olhar o help da função aov!
 
-```{r, eval = FALSE}
-test.anova = aov (compr.antebraco ~ subespecies, data=Bats)
-summary(test.anova)
-```
 
 __Para discussao:__
 
-Existe um efeito do sexo tambem? Faz sentido tesar o efeito de sexo separando por
+Existe um efeito do sexo tambem? Faz sentido testar o efeito de sexo separando por
 subespécie ou com tudo junto?

@@ -356,7 +356,7 @@ grande.media</code></pre></div>
 <p>A Soma dos Quadarados Total é uma estimativa de quanto o conjunto de dados (todos os grupos) varia em relacao à grande media.</p>
 <p>O cálculo é simples:</p>
 <p>Temos que somar as distâncias dos dados de todos os grupos e a grande media, elevado ao quadrado.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">diff.total =<span class="st"> </span>asas <span class="op">-</span><span class="st"> </span>grande.media
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">diff.total =<span class="st"> </span>compr.antebraco <span class="op">-</span><span class="st"> </span>grande.media
 
 diff.total.quad =<span class="st"> </span>diff.total<span class="op">^</span><span class="dv">2</span>
 
@@ -364,7 +364,7 @@ SQT =<span class="st"> </span><span class="kw">sum</span>(diff.total.quad)
 SQT </code></pre></div>
 <p>Graus de liberdade:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># número de grupos (3) vezes o número de cada grupo (30) menos 1</span>
-(m<span class="op">*</span>n)<span class="op">-</span><span class="dv">1</span> 
+<span class="co"># (m*n)-1 </span>
 <span class="co"># (3 * 30) - 1 = 89</span></code></pre></div>
 <p>Se nós dividirmos 7541.426 (SQT) por 89 (graus de liberdade) vamos ter a variância para toda a amostra!</p>
 <p>Nós vimos na aula teórica sobre ANOVA que a soma dos quadrados total é igual a soma dos quadrados dentro e entre grupos:</p>
@@ -380,7 +380,7 @@ SQT </code></pre></div>
 
 media.compr.antebraco <span class="co"># média do comprimento do antebraço para cada subespécie</span>
 
-sq.compr.antebraco.AM =<span class="st"> </span><span class="kw">sum</span>(compr.antebraco[<span class="st">&quot;AM&quot;</span>]<span class="op">-</span>media.compr.antebraco[<span class="st">&quot;AM&quot;</span>])<span class="op">^</span><span class="dv">2</span><span class="er">)</span>
+sq.compr.antebraco.AM =<span class="st"> </span><span class="kw">sum</span>((compr.antebraco[<span class="st">&quot;AM&quot;</span>]<span class="op">-</span>media.compr.antebraco[<span class="st">&quot;AM&quot;</span>])<span class="op">^</span><span class="dv">2</span>)
 sq.compr.antebraco.AM
 
 sq.compr.antebraco.CE =<span class="st"> </span><span class="kw">sum</span>((compr.antebraco[<span class="st">&quot;CE&quot;</span>]<span class="op">-</span>media.compr.antebraco[<span class="st">&quot;CE&quot;</span>])<span class="op">^</span><span class="dv">2</span>)
@@ -389,7 +389,7 @@ sq.compr.antebraco.CE
 sq.compr.antebraco.MA =<span class="st"> </span><span class="kw">sum</span>((compr.antebraco[<span class="st">&quot;MA&quot;</span>]<span class="op">-</span>media.compr.antebraco[<span class="st">&quot;MA&quot;</span>])<span class="op">^</span><span class="dv">2</span>)
 sq.compr.antebraco.MA
 
-SQD =<span class="st"> </span><span class="kw">sum</span>(compr.antebraco.AM,compr.antebraco.CE,compr.antebraco.MA)
+SQD =<span class="st"> </span><span class="kw">sum</span>(sq.compr.antebraco.AM, sq.compr.antebraco.CE, sq.compr.antebraco.MA)
 SQD </code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Graus de liberdade: </span>
 <span class="co"># m(n-1) = 3(30 - 1): 3 * 29 = 87</span></code></pre></div>
@@ -412,7 +412,7 @@ SQE.MA =<span class="st"> </span><span class="dv">30</span><span class="op">*</s
 SQE =<span class="st"> </span><span class="kw">c</span>(SQE.AM <span class="op">+</span><span class="st"> </span>SQE.CE <span class="op">+</span><span class="st"> </span>SQE.MA)
 SQE</code></pre></div>
 <p>Ou, simplesmente:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">SQE_simples =<span class="st"> </span><span class="kw">sum</span>(<span class="dv">30</span><span class="op">*</span>(media.asas <span class="op">-</span><span class="st"> </span>grande.media)<span class="op">^</span><span class="dv">2</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">SQE_simples =<span class="st"> </span><span class="kw">sum</span>(<span class="dv">30</span><span class="op">*</span>(media.compr.antebraco <span class="op">-</span><span class="st"> </span>grande.media)<span class="op">^</span><span class="dv">2</span>)
 
 SQE_simples <span class="op">+</span><span class="st"> </span>SQD <span class="co"># veja se o total é igual ao valor de SQT</span></code></pre></div>
 <p>Graus de liberdade: (m-1): 2</p>
@@ -442,10 +442,8 @@ p.compr.antebraco</code></pre></div>
 <p><strong>Pergunta:</strong></p>
 <p>Vc rejeitou ou aceitou sua hipótese nula? Subespécies diferentes de morcegos tem comprimentos de antebraço diferentes?</p>
 <p>Agora faça novamente a anova no R. Dessa vez, use a funçao aov e depois use o summary para verificar os resultados? Não esqueça de olhar o help da função aov!</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test.anova =<span class="st"> </span><span class="kw">aov</span> (compr.antebraco <span class="op">~</span><span class="st"> </span>subespecies, <span class="dt">data=</span>Bats)
-<span class="kw">summary</span>(test.anova)</code></pre></div>
 <p><strong>Para discussao:</strong></p>
-<p>Existe um efeito do sexo tambem? Faz sentido tesar o efeito de sexo separando por subespécie ou com tudo junto?</p>
+<p>Existe um efeito do sexo tambem? Faz sentido testar o efeito de sexo separando por subespécie ou com tudo junto?</p>
 </div>
 
 
