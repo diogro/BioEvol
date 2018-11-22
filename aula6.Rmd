@@ -1,7 +1,7 @@
 ---
 title: "Tutorial Biologia Evolutiva 2018"
 author: "Diogo Melo"
-date: "November 1st, 2018"
+date: "November 22, 2018"
 output:
   html_document:
     highlight: tango
@@ -263,6 +263,8 @@ TREE <- "(E:3,((D:1,B:1):1,(C:1, A:1):1):1);"
 tree <- read.tree(text = TREE)
 tree$tip.label = c("E", "D", "B", "C", "A")
 tree$node.label = c("root", "ABCD", "DB", "AC")
+plot(tree, show.node.label=TRUE)
+nodelabels()
 
 # Matrizes ancestrais
 all_cov_matrices = PhyloW(tree, cov_matrices)
@@ -274,7 +276,6 @@ dentus_means = ddply(dentus, "species", numcolwise(mean))
 # Medias ancestrais
 if(!require(ape)){install.packages("ape"); library(ape)}
 dentus_ancestral = sapply(dentus_means[2:5], function(x) {
-  names(x) = as.character(dentus_means[,1])
   ace(x, tree)$ace
 })
 
@@ -326,7 +327,7 @@ beta_B_DB = solve(all_cov_matrices$DB, delta_Zs$B)
 beta_B_DB
 ```
 
-Ou seja, diminuição da ulna e aumento de femur e tibia. Vamos agora tentar entender o que esse $\beta$ significa.
+Ou seja, diminuição do mumero e ulna e aumento de femur e tibia. Vamos agora tentar entender o que esse $\beta$ significa.
 
 ## Comparação de $\Delta z$ e $\beta$
 
@@ -362,6 +363,8 @@ abs(corVector(delta_Zs$B, PC2_DB))
 corVector(delta_Zs$B, beta_B_DB)
 ```
 
-Então, ficamos assim: correlação relativamente baixa entre $\Delta z$ e o primeiro componente, indicando que a mudança evolutiva não foi na direção do componente alométrico. Quando olhamos a correlação entre a seleção e a resposta, temos uma correlação de 0.90, indicando que a diversificação da espécie C se deu de forma alinhada com a seleção (e não seguindo a linha de menor resistência evolutiva). Será que o habito de vida dessa espécie pode trazer alguma pista?
+Então, ficamos assim: correlação relativamente baixa entre $\Delta z$ e o primeiro componente, indicando que a mudança evolutiva não foi na direção do componente alométrico.
+Mas note que o $\Delta z$ está mais alinhado com o segundo componente principal. A correlação foi de 0.83. Observe que o PC2 representa um contraste entre humero e ulna (aumento desses caracteres) e femur e tíbia (diminuição desses caracteres). $\Delta z$ então foi na direção de aumento de humero e ulna e diminuição de femur e tibia.     
+Quando olhamos a correlação entre a seleção e a resposta, temos uma correlação de 0.90, indicando que a diversificação da espécie B se deu de forma alinhada com a seleção (e não seguindo a linha de menor resistência evolutiva). Será que o habito de vida dessa espécie pode trazer alguma pista?
 
-Agora, faça essa análise para todas as espécies e nós internos. 
+Agora, faça essa análise para todas as espécies e nós internos.  
