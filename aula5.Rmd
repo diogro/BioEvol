@@ -52,8 +52,8 @@ cov_matrices = dlply(dentus, .(species), function(x) cov(x[,1:4]))
 A matriz do ancestral comum entre as espécies A e C é dada pela ponderada entre as matrizes atuais:
 
 ```{r}
-cov_matrix_AC = (60 * cov_matrices$A + 60 * cov_matrices$C)/120
-cov_matrix_AC
+cov_matrix_ACD = (60 * cov_matrices$A + 60 * cov_matrices$C)/120
+cov_matrix_ACD
 ```
 
 A ideia é que essa matriz é a mesma coisa que fazer a covariância normalmente, mas usando a média das espécies separadamente. Vamos usar a formula de covariância diretamente, mas controlando para o número de graus de liberdade:
