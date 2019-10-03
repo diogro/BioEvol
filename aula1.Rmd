@@ -1,7 +1,7 @@
 ---
-title: "Tutorial Biologia Evolutiva 2017"
+title: "Tutorial Biologia Evolutiva 2019"
 author: "Diogo Melo"
-date: "October 16, 2016"
+date: "October 03, 2019"
 output:
   html_document:
     highlight: tango
@@ -89,7 +89,7 @@ head(dentus)
 
 Como podemos ver, os dados estão organizados em linhas e colunas. Cada linha representa um indivíduo, e cada coluna representa um caráter. As 4 primeiras colunas são os caracteres quantitativos, e a quinta coluna contém a espécie de cada indivíduo.
 
-Essa mesma planilha está disponível nesse [link](https://raw.githubusercontent.com/diogro/BioEvol/master/dentus2016.csv).
+Essa mesma planilha está disponível nesse [link](https://raw.githubusercontent.com/diogro/BioEvol/master/dentus2019.csv).
 
 # Objetivos da Aula 1
 
