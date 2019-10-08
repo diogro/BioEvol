@@ -1,7 +1,7 @@
 ---
-title: "Tutorial Biologia Evolutiva 2018"
+title: "Tutorial Biologia Evolutiva 2019"
 author: "Diogo Melo"
-date: "September 25, 2018"
+date: "October 10, 2019"
 output:
   html_document:
     highlight: tango
@@ -38,7 +38,7 @@ Para isso, vamos calcular:
  2. A matriz de covariância fenotípica por espécie;
  3. A matriz de correlação por espécie;
 
-Além disso, discuta:
+Além disso, vamos tentar responder as seguintes perguntas:
 
  1. Qual o padrão modular de cada espécie?
  2. Qual é a intensidade da associação entre os caracteres em cada espécie?
@@ -138,11 +138,11 @@ No R, basta chamar a função cov num objeto com mais de uma coluna:
 cov(dentus[,1:4])
 ```
 
-Essa é a matriz de covariância total (sem separação por espécie) dos nossos dados. Onde está o valor de covariância entre humero e ulna que calculamos antes? Esse valor aparece quantas vezes na matriz? Por que? Você consegue calcular agora a matriz de correlação total? Tem um jeito fácil (função cor), um médio (função cov2cor), e um difícil (na unha)!
+Essa é a matriz de covariância total (sem separação por espécie) dos nossos dados. Onde está o valor de covariância entre humero e ulna que calculamos antes? Esse valor aparece quantas vezes na matriz? Por que? Você consegue calcular agora a matriz de correlação total? Tem um jeito fácil (função cor), um médio (função cov2cor), e um difícil (na unha, dividindo cada posição pelo produto dos desvios padrões correspondentes)!
 
 ## Medindo covariâncias de cada espécie
 
-Agora vamos medir as covariâncias e correlações dentro de cada espécie. Para isso, vamos aprender a escolher apenas algumas linhas de uma tabela de dados no R. Suponha que eu queira ver apenas as linhas que sejam da espécie A. Posso fazer isso com o comando:
+Agora vamos medir as covariâncias e correlações dentro de cada espécie. Para isso, vamos aprender a escolher apenas algumas linhas de uma tabela de dados no R. Suponha que eu queira ver apenas as linhas que sejam da espécie A. Posso fazer isso com o comando a seguir, que filtra somente as linhas nas quais a coluna espécie assume o valor "A":
 
 ```{r, eval = FALSE}
 dentus[ dentus$species == "A", ]
