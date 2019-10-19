@@ -68,7 +68,7 @@ if(!require(ape)){install.packages("ape"); library(ape)}
 data(dentus)
 ```
 
-Agora vamos colocar nossa filogenia num objeto do R, usand uma notação parentética:
+Agora vamos colocar nossa filogenia num objeto do R, usando uma notação parentética:
 
 ```{r, warning=FALSE, message=FALSE}
 TREE <- "(E:3,((D:1,B:1):1,(C:1, A:1):1):1);"
@@ -93,7 +93,7 @@ humerus_ancestral = ace(dentus_means$humerus, tree)
 humerus_ancestral
 ```
 
-Novamente o objeto de saida tem várias partes, chamadas ace, sigma2 e CI95. ace são as estimativas propriamente ditas; sigma2 é um parâmetro ligado à taxa de evolução sobre um modelo de movimento browniano; e CI95 são os intervalos de confiânça para as estimativas em cada nó. Nesse curso vamos nos preocupar apenas com as estimativas, e podemos acessá-las usando o operador $:
+Novamente o objeto de saida tem várias partes, chamadas ace, sigma2 e CI95. ace são as estimativas propriamente ditas; sigma2 é um parâmetro ligado à taxa de evolução sob um modelo de movimento browniano; e CI95 são os intervalos de confiânça para as estimativas em cada nó. Nesse curso vamos nos preocupar apenas com as estimativas, e podemos acessá-las usando o operador $:
 
 ```{r}
 humerus_ancestral$ace
@@ -140,14 +140,14 @@ Esse objeto l_dentus é muito conveniente, porque com ele podemos acessar as mé
 l_dentus$root
 ```
 
-Agora podemos usar esse vetores de caracteres para calcular nossos vetores de mudança fenotípica ao longo da filogenia, os famigerados $\Delta z$. Para isso, é só subtrair o descendente do ancestral. Por exemplo, para o $\Delta z$ associado ao ramo que vai do nó AC para o terminal C, fazemos:
+Agora podemos usar esse vetores de caracteres para calcular nossos vetores de mudança fenotípica ao longo da filogenia, os famigerados $\Delta z$. Para isso, é só subtrair o descendente do ancestral. Por exemplo, para o $\Delta z$ associado ao ramo que vai do nó DB para o terminal D, fazemos:
 
 ```{r}
 deltaZ_DB_D = l_dentus$D - l_dentus$DB
 deltaZ_DB_D
 ```
 
-Este é o vetor de mudança evolutiva entre a espécie C e seu ancestral mais próximo.
+Este é o vetor de mudança evolutiva entre a espécie D e seu ancestral mais próximo.
 
 ## Correlação de vetores
 
@@ -204,7 +204,7 @@ $$
 cos\theta = \frac{a \cdot b}{\|a\|\|b\|}
 $$
 
-Ou seja, o cosseno do ângulo entre dois vetores pode ser escrito como o __produto interno entre eles dividido pelo produto das suas normas__. Esse valor de cosseno pode ser utilizado como uma medida de similaridade de vetores no que se refere à sua direção. Se dois vetores apontam no mesmo sentido, o ângulo entre eles é zero e o cosseno é 1; se eles apontam em direções ortogonoais, o ângulo entre eles é de noventa graus e o cosseno é zero.
+Ou seja, o cosseno do ângulo entre dois vetores pode ser escrito como o __produto interno entre eles dividido pelo produto das suas normas__. Esse valor de cosseno pode ser utilizado como uma medida de similaridade de vetores no que se refere à sua direção. Se dois vetores apontam no mesmo sentido, o ângulo entre eles é zero e o cosseno é 1; se eles apontam em direções ortogonais, o ângulo entre eles é de noventa graus e o cosseno é zero.
 
 Para entender por que nós costumamos chamar essa medida de correlação de vetores, pense na equaçao da correlação entre $x$ e $y$:
 
@@ -259,11 +259,11 @@ E finalmente uma para a correlação:
 corVector = function(x, y) prod_interno(x, y)/(norma(x)*norma(y))
 ```
 
-Agora podemos usar essa função para calcular correlações entre todos os nossos vetores e responder perguntas evolutivas! Por exemplo, será que a diferenciação da população C se deu ao longo da sua linha de menor resistencia evolutiva?
+Agora podemos usar essa função para calcular correlações entre todos os nossos vetores e responder perguntas evolutivas! Por exemplo, será que a diferenciação da população D se deu ao longo da sua linha de menor resistencia evolutiva?
 
 ```{r}
 cov_matrices = dlply(dentus, .(species), function(x) cov(x[,1:4]))
-PC1_D= eigen(cov_matrices$D)$vectors[,1]
+PC1_D = eigen(cov_matrices$D)$vectors[,1]
 abs(corVector(PC1_D, deltaZ_DB_D))
 ```
 Parce que sim!!
