@@ -30,12 +30,14 @@ knitr::opts_chunk$set(echo = TRUE)
 # Objetivos da Aula 5
 
 - Estimar as matrizes de covariância dos nós ancestrais
-    - Estimar os PCs das matrizes ancestrais
+
+- Estimar os PCs das matrizes ancestrais
+
 - Comparar os componentes principais das matrizes dentro e entre grupos
 
 ## Matrizes ancestrais
 
-O calculo das matrizes ancestrais é feito como uma média ponderada das matrizes ao longo da filogenia. Isso é equivalente a calcular uma matriz de covariância usando a fórmula usual da covariância, mas substituindo a média global pela média da espécie do indivíduo sendo considerado. Se $\overline{z^i}_{sp[k]}$ representa a média da espécie do indivíduo $k$ para o caráter $i$, a matriz de covariância para um nó ancestral é dada por:
+O cálculo das matrizes ancestrais é feito como uma média ponderada das matrizes ao longo da filogenia. Isso é equivalente a calcular uma matriz de covariância usando a fórmula usual da covariância, mas substituindo a média global pela média da espécie do indivíduo sendo considerado. Se $\overline{z^i}_{sp[k]}$ representa a média da espécie do indivíduo $k$ para o caráter $i$, a matriz de covariância para um nó ancestral é dada por:
 
 $$
 Cov(z^i, z^j) = \frac{1}{N} \sum_{k = 1}^{N} (z_{k}^i - \overline{z^i}_{sp[k]})(z_{k}^j - \overline{z^j}_{sp[k]})
