@@ -50,7 +50,7 @@ Nós coletamos em campo 90 indivíduos de morcegos e obtivemos as seguintes info
 A amostra coletada está dividida em três subespécies: uma que ocorre no bioma Amazônia,
 outra no Cerrado, e a última da Mata Atlântica.
 
-```{r packagesfake, eval = FALSE}
+```{r packagesfake}
 # Gerando os dados
 set.seed (4)
 Bats.Amazonia.machos = round (rnorm(15, 5, 1),2)
@@ -72,25 +72,25 @@ names(Bats) = c("subespecies", "comp_antebraco", "peso", "sexo")
 
 ```{r, eval = FALSE}
 # Você pode salvar o conjunto de dados como extensão .csv para ler mais tarde
-# write.csv (Bats, file = "Bats.csv")
+write.csv (Bats, file = "Bats.csv")
 ```
 
-```{r,, eval = FALSE}
+```{r, eval = FALSE}
 # Se quiser abrir mais tarde a planilha salva, use a função read.csv
-# Bats = read.csv("Bats.csv")
+Bats = read.csv("Bats.csv")
 
 # Estabelecendo os nomes das colunas (variávies)
-# names(Bats) = c("subespecies", "comp_antebraco", "peso", "sexo")
+names(Bats) = c("subespecies", "comp_antebraco", "peso", "sexo")
 ```
 
 Carregando as primeiras linhas do conjunto de dados que vamos utilizar
 
-```{r, eval = FALSE}
+```{r}
 head(Bats)
 ```
 
 Olhando a estrutura desse conjunto de dados
-```{r, eval = FALSE}
+```{r}
 str(Bats)
 ```
 
@@ -102,15 +102,12 @@ Cerrado e Pantanal.
 
 Note que com isso queremos inspecionar se o comprimento do antebraço varia entre as diferentes subespécies. Ou, em outras palavras, estamos nos questionando: será que há diferença entre as subspécies no que diz respeito ao comprimento de seus antebraços? 
 
-```{r, eval = FALSE}
-require (ggplot2)
-library(evolqg)
-library(ggplot2)
-library(GGally)
-library(reshape2)
+```{r}
+if(!require(ggplot2)){install.packages("ggplot2"); library(ggplot2)}
+if(!require(evolqg)){install.packages("evolqg"); library(evolqg)}
+if(!require(GGally)){install.packages("GGally"); library(GGally)}
 
-ggplot(Bats, aes(subespecies, comp_antebraco, fill = subespecies)) +
-theme_bw()+ geom_boxplot() 
+ggplot(Bats, aes(subespecies, comp_antebraco, fill = subespecies)) + theme_bw()+ geom_boxplot() 
 ```
 __Perguntas para serem discutidas a partir do gráfico acima:__
 
@@ -141,8 +138,8 @@ Mas antes de fazermos a ANOVA descreva:
 
 # A Grande Média
 
-```{r, eval = FALSE}
-require(plyr)
+```{r}
+if(!require(plyr)){install.packages("plyr"); library(plyr)}
 
 compr.antebraco = data.frame (AM = Bats[1:30,2], CE=Bats[31:60,2], MA = Bats[61:90,2])
 
@@ -160,7 +157,7 @@ O cálculo é simples:
 
 Temos que somar as distâncias dos dados de todos os grupos e a grande media, elevado ao quadrado.
 
-```{r, eval = FALSE}
+```{r}
 
 diff.total = compr.antebraco - grande.media
 
@@ -195,7 +192,7 @@ __O quanto dessa variação total se refere à variação entre e dentros dos gr
 
 Para obter o valor da soma dos quadrados dentro dos grupos, nós vamos somar as distâncias de cada medida de comprimento de antebraço para sua respectiva média (média de cada subespécie: AM, CE ou MA), elevado ao quadrado.
 
-```{r, eval = FALSE}
+```{r}
 compr.antebraco # data.frame com os comprimentos de antebraço para cada subespécie
 
 media.compr.antebraco # média do comprimento do antebraço para cada subespécie
@@ -227,7 +224,7 @@ Vamos estimar quanto dessa variação se deve a variação entre essas médias.
 Para cada medida do comprimento do antebraço, vamos calcular a distância ao quadrado 
 entre a média da subespécie e a média das médias.
 
-```{r, eval = FALSE}
+```{r}
 media.compr.antebraco # média do comprimento dao antebraço para cada subespécie
 
 grande.media
@@ -244,7 +241,7 @@ SQE
 
 Ou, simplesmente:
 
-```{r, eval = FALSE}
+```{r}
 SQE_simples = sum(30*(media.compr.antebraco - grande.media)^2)
 
 SQE_simples + SQD # veja se o total é igual ao valor de SQT
@@ -263,7 +260,7 @@ Agora, some também os graus de liberdade de SQD e SQE e veja se é igual ao val
 
 Vamos agora calcular a estatística F. Ela é definida como sendo a razão entre SQE/g.l (desvio medio) e SDQ/g.l (desvio medio).
 
-```{r, eval = FALSE}
+```{r}
 mq.entre = SQE/2
 
 mq.dentro = SQD/87
@@ -280,7 +277,7 @@ F.compr.antebraco
 
 Dica: faça uma busca no help do R para saber o que a função pf faz!
 
-```{r, eval = FALSE}
+```{r}
 p.compr.antebraco = pf (F.compr.antebraco,2, 87, lower.tail=FALSE)
 p.compr.antebraco
 ```
@@ -292,7 +289,7 @@ Vc rejeitou ou aceitou sua hipótese nula? Subespécies diferentes de morcegos t
 
 Agora faça novamente a anova no R. Dessa vez, use a funçao aov e depois use o summary para verificar os resultados? Não esqueça de olhar o help da função aov!
 
-```{r, eval = FALSE}
+```{r}
 test.anova = aov (Bats[,2] ~ Bats[,1])
 summary(test.anova)
 ```
