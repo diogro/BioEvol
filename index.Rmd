@@ -33,4 +33,4 @@ Primeiro alguns links:
 <!-- 4. [Aula 4.1 - Reconstrução ancestral por parcimônia linear](http://diogro.github.io/BioEvol/aula4.1.html) -->
 5. [Aula 5 - Matrizes Ancestrais](http://diogro.github.io/BioEvol/aula5.html)
 6. [Aula 6 - Gradientes de Seleção](http://diogro.github.io/BioEvol/aula6.html)
-<!-- 7. [Aula 7 - Análise de Variância](http://diogro.github.io/BioEvol/analise_variancia.html) -->
+7. [Aula 7 - Análise de Variância](http://diogro.github.io/BioEvol/analise_variancia.html)
