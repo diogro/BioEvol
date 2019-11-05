@@ -1,7 +1,7 @@
 ---
-title: "Tutorial Biologia Evolutiva 2018"
+title: "Tutorial Biologia Evolutiva 2019"
 author: "Diogo Melo"
-date: "November 22, 2018"
+date: "November 7, 2019"
 output:
   html_document:
     highlight: tango
@@ -327,7 +327,7 @@ beta_B_DB = solve(all_cov_matrices$DB, delta_Zs$B)
 beta_B_DB
 ```
 
-Ou seja, diminuição do mumero e ulna e aumento de femur e tibia. Vamos agora tentar entender o que esse $\beta$ significa.
+Ou seja, seleção para diminuição do humero e ulna e aumento de femur e tibia. Vamos agora tentar entender o que esse $\beta$ significa.
 
 ## Comparação de $\Delta z$ e $\beta$
 
