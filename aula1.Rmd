@@ -31,7 +31,7 @@ R é um ambiente de programação _open source_ criado pensando em análises est
 
 ### Instalando o R
 
-Se você está utilizando um dos computadores do IB, o R já deve estar instalado. Se não, siga as instruções nesse [site](https://mran.revolutionanalytics.com/download/) para instalar o R, e opcionalmente (mas muito recomendado!) o editor de código [RStudio](https://www.rstudio.com/products/rstudio/download/).
+Se você está utilizando um dos computadores do IB, o R já deve estar instalado. Se não, siga as instruções nesse [site](https://cran.r-project.org/) para instalar o R, e opcionalmente (mas muito recomendado!) o editor de código [RStudio](https://www.rstudio.com/products/rstudio/download/).
 
 ### Rodando comandos
 
@@ -89,7 +89,7 @@ head(dentus)
 
 Como podemos ver, os dados estão organizados em linhas e colunas. Cada linha representa um indivíduo, e cada coluna representa um caráter. As 4 primeiras colunas são os caracteres quantitativos, e a quinta coluna contém a espécie de cada indivíduo.
 
-Essa mesma planilha está disponível nesse [link](https://raw.githubusercontent.com/diogro/BioEvol/master/dentus2019.csv).
+A planilha atualizada para 2023 está disponível nesse [link](https://raw.githubusercontent.com/diogro/BioEvol/master/dentus2023.csv).
 
 # Objetivos da Aula 1
 
