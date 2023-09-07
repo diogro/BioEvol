@@ -50,11 +50,11 @@ particular quero que os seguintes pontos sejam abordados:
 2. Calcule as estimativas dos valores médios para os ancestrais usando a filogenia abaixo com comprimentos de ramo dados pela escala acima da filogenia. Calcule as diferenças médias entre as espécies (oito vetores $\Delta z$ ao longo dos ramos da filogenia). Calcule a norma dos vetores $\Delta z$ (ou seja, o comprimento desses vetores). 
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
-library(phytools)
-TREE <- "(E:3,((D:1,B:1):1,(C:1, A:1):1)):1;"
+if(!require(ape)){install.packages("ape"); library(ape)}
+TREE <- "((((B:1, D:1):1, E:2):1, C:3):1, A:4):1;"
 tree <- read.tree(text = TREE)
-plot(tree)
-add.scale.bar(x = 0, y = 5, length = 1)
+tree$node.label = c("root", "CEDB", "EDB", "DB")
+plot(tree, show.node.label=TRUE)
 ```
 
 

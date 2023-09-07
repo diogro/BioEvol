@@ -47,14 +47,14 @@ Onde a soma é feita para todos os indivíduos para a espécies descendentes do 
 
 ```{r}
 if(!require(evolqg)){install.packages("evolqg"); library(evolqg)}
-data(dentus)
+dentus = read.csv('dentus2023.csv')
 cov_matrices = dlply(dentus, .(species), function(x) cov(x[,1:4]))
 ```
 
-A matriz do ancestral comum entre as espécies A e C é dada pela ponderada entre as matrizes atuais:
+A matriz do ancestral comum entre as espécies B e D é dada pela média ponderada entre as matrizes atuais:
 
 ```{r}
-cov_matrix_AC = (60 * cov_matrices$A + 60 * cov_matrices$C)/120
+cov_matrix_AC = (60 * cov_matrices$B + 60 * cov_matrices$D)/120
 cov_matrix_AC
 ```
 
@@ -62,28 +62,28 @@ A ideia é que essa matriz é a mesma coisa que fazer a covariância normalmente
 
 ```{r}
 means = daply(dentus, .(species), function(x) colMeans(x[,1:4]))
-dentus_AC = dentus[dentus$species == "A" | dentus$species == "C",]
-medias_AC = means[dentus[dentus$species == "A" | dentus$species == "C", 5],]
+dentus_BD = dentus[dentus$species == "B" | dentus$species == "D",]
+medias_BD = means[dentus[dentus$species == "B" | dentus$species == "D", 5],]
 
 # Essa correção pelos graus de liberdade é meio confusa, mas pense que a var()
 # vai tirar um grau de liberdade, mas a gente calculou duas médias,
 # então precisamos tirar outro!
-(119/(119-1)) * var(dentus_AC[,1:4] - medias_AC)
+(119/(119-1)) * var(dentus_BD[,1:4] - medias_BD)
 ```
 
 Bacana, deu a mesma coisa. Outra solução nesse caso é escrever o problema como uma regressão linear e extrair a covariância dos residuos:
 
 ```{r}
-residuos_AC = residuals(lm(as.matrix(dentus_AC[,1:4])~dentus_AC[,5]))
-(119/(119-1)) * cov(residuos_AC)
+residuos_BD = residuals(lm(as.matrix(dentus_BD[,1:4])~dentus_BD[,5]))
+(119/(119-1)) * cov(residuos_BD)
 ```
 
-O resultado é o mesmo. Você pode ler o termo `as.matrix(dentus_AC[,1:4])~dentus_AC[,5]` como: _as colunas de 1 a 4 do objeto dentus_AC em função da quinta coluna do objeto dentus_AC_. Você pode pensar no operador `~` como um "_em função de_". Variáveis dependentes à esquerda e preditoras à direita.
+O resultado é o mesmo. Você pode ler o termo `as.matrix(residuos_BD[,1:4])~dentus_BD[,5]` como: _as colunas de 1 a 4 do objeto dentus_AC em função da quinta coluna do objeto dentus_BD_. Você pode pensar no operador `~` como um "_em função de_". Variáveis dependentes à esquerda e preditoras à direita.
 
 Um jeito mais simples ainda é usar a função CalculateMatrix() do pacote evolqg, que calcula os graus de liberdade corretamente a partir do modelo linear:
 
 ```{r}
-CalculateMatrix(lm(as.matrix(dentus_AC[,1:4])~dentus_AC[,5]))
+CalculateMatrix(lm(as.matrix(dentus_BD[,1:4])~dentus_BD[,5]))
 ```
 
 Ótimo, temos vários jeitos de calcular as matrizes de covariância usando as médias de cada espécie. Essa matriz ponderada de vários grupos ao mesmo tempo costuma ser chamada de $\mathbf{W}$, ou matriz ponderada dentro de grupos (within-groups, dai o $\mathbf{W}$).
@@ -102,10 +102,11 @@ Tudo isso é bom e poderiámos calcular as matrizes ancestrais assim para os nos
 Primeiro a filogenia:
 ```{r}
 if(!require(ape)){install.packages("ape"); library(ape)}
-TREE <- "(E:3,((D:1,B:1):1,(C:1, A:1):1):1);"
+TREE <- "((((B:1, D:1):1, E:2):1, C:3):1, A:4):1;"
 tree <- read.tree(text = TREE)
-tree$tip.label = c("E", "D", "B", "C", "A")
-tree$node.label = c("root", "ABCD", "DB", "AC")
+node_labels =  c("root", "CEDB", "EDB", "DB")
+tree$node.label = node_labels
+plot(tree, show.node.label=TRUE)
 ```
 
 E agora usamos a filogenia e a lista de matrizes atuais na funçao PhyloW para calcular uma matriz ancestral (ou dentro de grupos) para cada nó:

@@ -693,12 +693,12 @@ data(dentus)
 Agora vamos colocar nossa filogenia num objeto do R, usand uma notação parentética:
 
 ```{r, warning=FALSE, message=FALSE}
-TREE <- "(E:3,((C:1,B:1):1,(D:1, A:1):1)):1;"
+if(!require(ape)){install.packages("ape"); library(ape)}
+TREE <- "((((B:1, D:1):1, E:2):1, C:3):1, A:4):1;"
 tree <- read.tree(text = TREE)
-tree$tip.label = c("E", "C", "B", "D", "A")
-tree$node.label = c("root", "ABCD", "CB", "AD")
+node_labels =  c("root", "CEDB", "EDB", "DB")
+tree$node.label = node_labels
 plot(tree, show.node.label=TRUE)
-nodelabels()
 ```
 
 Para fazer as estimativas ancestrais, precisamos calcular as médias atuais. Podemos fazer isso rapidamente usando a função ddply do pacote [plyr](http://had.co.nz/plyr/).
@@ -734,7 +734,7 @@ dentus_ancestral
 Vamos incluir uma coluna de "especie" nessa tabela de estados ancestrais:
 
 ```{r}
-dentus_ancestral = data.frame(species =  c("root", "ABCD", "CB", "AD"), dentus_ancestral)
+dentus_ancestral = data.frame(species =  node_labels, dentus_ancestral)
 ```
 
 Agora podemos juntar ela com nossa tabela de médias antiga, e ficar com tudo no mesmo objeto:
@@ -765,8 +765,8 @@ l_dentus$root
 Agora podemos usar esse vetores de caracteres para calcular nossos vetores de mudança fenotípica ao longo da filogenia, os famigerados $\Delta z$. Para isso, é só subtrair o descendente do ancestral. Por exemplo, para o $\Delta z$ associado ao ramo que vai do nó AD para o terminal D, fazemos:
 
 ```{r}
-deltaZ_AD_D = l_dentus$D - l_dentus$AD
-deltaZ_AD_D
+deltaZ_DB_D = l_dentus$D - l_dentus$DB
+deltaZ_DB_D
 ```
 
 Este é o vetor de mudança evolutiva entre a espécie D e seu ancestral mais próximo.
@@ -886,7 +886,7 @@ Agora podemos usar essa função para calcular correlações entre todos os noss
 ```{r}
 cov_matrices = dlply(dentus, .(species), function(x) cov(x[,1:4]))
 PC1_D = eigen(cov_matrices$D)$vectors[,1]
-abs(corVector(PC1_D, deltaZ_AD_D))
+abs(corVector(PC1_D, deltaZ_DB_D))
 ```
 
 Parce que sim!!
@@ -926,36 +926,36 @@ cov_matrices = dlply(dentus, .(species), function(x) cov(x[,1:4]))
 A matriz do ancestral comum entre as espécies A e D é dada pela ponderada entre as matrizes atuais:
 
 ```{r}
-cov_matrix_AD = (60 * cov_matrices$A + 60 * cov_matrices$D)/120
-cov_matrix_AD
+cov_matrix_BD = (60 * cov_matrices$D + 60 * cov_matrices$B)/120
+cov_matrix_BD
 ```
 
 A ideia é que essa matriz é a mesma coisa que fazer a covariância normalmente, mas usando a média das espécies separadamente. Vamos usar a formula de covariância diretamente, mas controlando para o número de graus de liberdade:
 
 ```{r}
 means = daply(dentus, .(species), function(x) colMeans(x[,1:4]))
-dentus_AD = dentus[dentus$species == "A" | dentus$species == "D",]
-medias_AD = means[dentus[dentus$species == "A" | dentus$species == "D", 5],]
+dentus_BD = dentus[dentus$species == "B" | dentus$species == "D",]
+medias_BD = means[dentus[dentus$species == "B" | dentus$species == "D", 5],]
 
 # Essa correção pelos graus de liberdade é meio confusa, mas pense que a var()
 #vai tirar um grau de liberdade, mas a gente calculou duas médias,
 # então precisamos tirar outro!
-(119/(119-1)) * var(dentus_AD[,1:4] - medias_AD)
+(119/(119-1)) * var(dentus_BD[,1:4] - medias_BD)
 ```
 
 Bacana, deu a mesma coisa. Outra solução nesse caso é escrever o problema como uma regressão linear e extrair a covariância dos residuos:
 
 ```{r}
-residuos_AD = residuals(lm(as.matrix(dentus_AD[,1:4])~dentus_AD[,5]))
-(119/(119-1)) * cov(residuos_AD)
+residuos_BD = residuals(lm(as.matrix(dentus_BD[,1:4])~dentus_BD[,5]))
+(119/(119-1)) * cov(residuos_BD)
 ```
 
-O resultado é o mesmo. Você pode ler o termo `as.matrix(dentus_AD[,1:4])~dentus_AD[,5]` como: _as colunas de 1 a 4 do objeto dentus_AD em função da quinta coluna do objeto dentus_AD_. Você pode pensar no operado `~` como um "_em função de_". Variáveis dependentes à esquerda e preditoras à direita.
+O resultado é o mesmo. Você pode ler o termo `as.matrix(dentus_BD[,1:4])~dentus_BD[,5]` como: _as colunas de 1 a 4 do objeto dentus_BD em função da quinta coluna do objeto dentus_BD_. Você pode pensar no operado `~` como um "_em função de_". Variáveis dependentes à esquerda e preditoras à direita.
 
 Um jeito mais simples ainda é usar a função CalculateMatrix() do pacote evolqg, que calcula os graus de liberdade corretamente a partir do modelo linear:
 
 ```{r}
-CalculateMatrix(lm(as.matrix(dentus_AD[,1:4])~dentus_AD[,5]))
+CalculateMatrix(lm(as.matrix(dentus_BD[,1:4])~dentus_BD[,5]))
 ```
 
 Ótimo, temos vários jeitos de calcular as matrizes de covariancia usando as médias de cada espécie. Essa matriz ponderada de vários grupos ao mesmo tempo costuma ser chamada de $\mathbf{W}$, ou matriz ponderada dentro de grupos (within-groups, dai o $\mathbf{W}$).
