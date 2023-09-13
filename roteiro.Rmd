@@ -37,7 +37,7 @@ das espécies.
     territórios e as fêmeas escolhendo para reproduzir os machos com
     "melhores" territórios.
 
--   Finalmente, a espécie E apresenta um padrão de integração similar à
+-   Finalmente, a espécie A apresenta um padrão de integração similar à
     do ancestral do grupo.
 
 De posse destas medidas e das informações extraídas da literatura, o
