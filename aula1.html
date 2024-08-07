@@ -11,9 +11,8 @@
 
 <meta name="author" content="Diogo Melo" />
 
-<meta name="date" content="2019-10-03" />
 
-<title>Tutorial Biologia Evolutiva 2019</title>
+<title>Tutorial Biologia Evolutiva 2024</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1574,9 +1573,9 @@ font-size: 0.95em;
 
 
 
-<h1 class="title toc-ignore">Tutorial Biologia Evolutiva 2019</h1>
+<h1 class="title toc-ignore">Tutorial Biologia Evolutiva 2024</h1>
 <h4 class="author">Diogo Melo</h4>
-<h4 class="date">October 03, 2019</h4>
+<h4 class="date">7 de Agosto, 2024</h4>
 
 </div>
 
@@ -1656,7 +1655,6 @@ IB!)</p>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
 <span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co"># Carregando o conjunto de dados que vamos utilizar</span></span>
 <span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="fu">data</span>(dentus)</span></code></pre></div>
-<pre><code>## Loading required package: plyr</code></pre>
 </div>
 <div id="aos-dados" class="section level2" number="1.4">
 <h2><span class="header-section-number">1.4</span> Aos dados!</h2>
@@ -1664,7 +1662,7 @@ IB!)</p>
 nome do objeto com os dados.</p>
 <p>Aqui vamos ver só as primeiras linhas, mas no seu computador você
 deve ver o conjunto completo.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>dentus</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>dentus</span></code></pre></div>
 <pre><code>##    humerus      ulna    femur    tibia species
 ## 1 3.214619  8.036072 13.51779 19.01131       A
 ## 2 5.222875 10.838375 15.54714 21.01718       A
@@ -1679,8 +1677,8 @@ coluna contém a espécie de cada indivíduo.</p>
 <p>A planilha atualizada para 2024 está disponível nesse <a href="https://raw.githubusercontent.com/diogro/BioEvol/master/dentus2024.csv">link</a>.</p>
 <p>Você pode ler esses dados atualizados diretamente no R com o
 comando:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Carregando os dados atualizados</span></span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>dentus <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/diogro/BioEvol/master/dentus2024.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Carregando os dados atualizados</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>dentus <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/diogro/BioEvol/master/dentus2024.csv&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="objetivos-da-aula-1" class="section level1" number="2">
@@ -1703,34 +1701,34 @@ globais</h2>
 e a função mean.</p>
 <p>Os resultados não aparecem aqui, mas rodando os comandos no R você
 deve ser capaz de produzí-los!</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Como a última coluna contém as espécie, </span></span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co"># vamos utilizar o operador de indexação do R  [] para selecionar as colunas de 1 a 4.</span></span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co"># A função sapply passa todas as colunas do primeiro argumento para a função no segundo argumento. </span></span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">sapply</span>(dentus[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], mean)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Como a última coluna contém as espécie, </span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co"># vamos utilizar o operador de indexação do R  [] para selecionar as colunas de 1 a 4.</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co"># A função sapply passa todas as colunas do primeiro argumento para a função no segundo argumento. </span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="fu">sapply</span>(dentus[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], mean)</span></code></pre></div>
 <p>Podemos utilizar a mesma estratégia para calcular as variâncias e
 desvios padrões:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Variâncias</span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">sapply</span>(dentus[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], var)</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co"># Desvios padrão</span></span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="fu">sapply</span>(dentus[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], sd)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Variâncias</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">sapply</span>(dentus[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], var)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co"># Desvios padrão</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="fu">sapply</span>(dentus[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], sd)</span></code></pre></div>
 <p>Para calcular o coeficiente de variação, podemos dividir diretamente
 o desvio padrão pela média:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># Objeto com os desvios padrão</span></span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>dentus_sd <span class="ot">=</span> <span class="fu">sapply</span>(dentus[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], sd)</span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co"># Objeto com as médias</span></span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>dentus_mean <span class="ot">=</span> <span class="fu">sapply</span>(dentus[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], mean)</span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co"># Cálculo do coeficiente de variação</span></span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>dentus_sd<span class="sc">/</span>dentus_mean</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Objeto com os desvios padrão</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>dentus_sd <span class="ot">=</span> <span class="fu">sapply</span>(dentus[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], sd)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co"># Objeto com as médias</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>dentus_mean <span class="ot">=</span> <span class="fu">sapply</span>(dentus[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], mean)</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co"># Cálculo do coeficiente de variação</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>dentus_sd<span class="sc">/</span>dentus_mean</span></code></pre></div>
 <p>Ou podemos criar uma função que calcula o coeficiente de variação
 diretamente</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># Função que calcula o coeficiente de variação</span></span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>cv <span class="ot">=</span> <span class="cf">function</span>(x) <span class="fu">sd</span>(x)<span class="sc">/</span><span class="fu">mean</span>(x)</span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co"># Coeficiente de variação</span></span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="fu">sapply</span>(dentus[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], cv)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># Função que calcula o coeficiente de variação</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>cv <span class="ot">=</span> <span class="cf">function</span>(x) <span class="fu">sd</span>(x)<span class="sc">/</span><span class="fu">mean</span>(x)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co"># Coeficiente de variação</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="fu">sapply</span>(dentus[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], cv)</span></code></pre></div>
 </div>
 <div id="médias-e-variâncias-por-espécie" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Médias e variâncias
@@ -1740,7 +1738,7 @@ espécie. A função aggregate vai ajudar. Essa função é muito semelhante à
 sapply, mas ela recebe um argumento adicional que permite utilizar uma
 coluna dos dados para separar os individuos em grupos. Por exemplo, para
 calcular a média por espécie fazemos:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">aggregate</span>(dentus[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], <span class="fu">list</span>(<span class="at">especie =</span> dentus[,<span class="dv">5</span>]), mean)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">aggregate</span>(dentus[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], <span class="fu">list</span>(<span class="at">especie =</span> dentus[,<span class="dv">5</span>]), mean)</span></code></pre></div>
 <pre><code>##   especie   humerus      ulna    femur    tibia
 ## 1       A  4.948718  9.949203 15.11119 20.17994
 ## 2       B  8.449116 17.043157 25.58400 34.03991
@@ -1760,30 +1758,30 @@ distribuição dos nossos dados.</p>
 <div id="carregando-pacotes-gráficos" class="section level3" number="2.3.1">
 <h3><span class="header-section-number">2.3.1</span> Carregando pacotes
 gráficos</h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>list_pkgs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;GGally&quot;</span>, <span class="st">&quot;reshape2&quot;</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>new_pkgs <span class="ot">&lt;-</span> list_pkgs[<span class="sc">!</span>(list_pkgs <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="st">&quot;Package&quot;</span>])]</span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">length</span>(new_pkgs) <span class="sc">&gt;</span> <span class="dv">0</span>){ <span class="fu">install.packages</span>(new_pkgs) }</span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="fu">library</span>(evolqg)</span>
-<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
-<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>list_pkgs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;GGally&quot;</span>, <span class="st">&quot;reshape2&quot;</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>new_pkgs <span class="ot">&lt;-</span> list_pkgs[<span class="sc">!</span>(list_pkgs <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="st">&quot;Package&quot;</span>])]</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">length</span>(new_pkgs) <span class="sc">&gt;</span> <span class="dv">0</span>){ <span class="fu">install.packages</span>(new_pkgs) }</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="fu">library</span>(evolqg)</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span></code></pre></div>
 </div>
 <div id="gráficos-univariados" class="section level3" number="2.3.2">
 <h3><span class="header-section-number">2.3.2</span> Gráficos
 univariados</h3>
 <p>O primeiro e mais simples talvez seja o histograma.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">melt</span>(dentus), <span class="fu">aes</span>(value, <span class="at">group =</span> species, <span class="at">fill =</span> species)) <span class="sc">+</span> </span>
-<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span> </span>
-<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>variable, <span class="at">scale =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">melt</span>(dentus), <span class="fu">aes</span>(value, <span class="at">group =</span> species, <span class="at">fill =</span> species)) <span class="sc">+</span> </span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span> </span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>variable, <span class="at">scale =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
 <p>Podemos também usar boxplots:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">melt</span>(dentus), <span class="fu">aes</span>(species, value, <span class="at">fill =</span> species, <span class="at">group =</span> <span class="fu">interaction</span>(species, variable))) <span class="sc">+</span> </span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
-<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>variable, <span class="at">scale =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">melt</span>(dentus), <span class="fu">aes</span>(species, value, <span class="at">fill =</span> species, <span class="at">group =</span> <span class="fu">interaction</span>(species, variable))) <span class="sc">+</span> </span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>variable, <span class="at">scale =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
 <p>Ou um chiquérrimo violin plot:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">melt</span>(dentus), <span class="fu">aes</span>(species, value, <span class="at">fill =</span> species, <span class="at">group =</span> <span class="fu">interaction</span>(species, variable))) <span class="sc">+</span> </span>
-<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>  <span class="fu">geom_violin</span>() <span class="sc">+</span> </span>
-<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>variable, <span class="at">scale =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">melt</span>(dentus), <span class="fu">aes</span>(species, value, <span class="at">fill =</span> species, <span class="at">group =</span> <span class="fu">interaction</span>(species, variable))) <span class="sc">+</span> </span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>  <span class="fu">geom_violin</span>() <span class="sc">+</span> </span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>variable, <span class="at">scale =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
 </div>
 <div id="gráficos-bivariados" class="section level3" number="2.3.3">
 <h3><span class="header-section-number">2.3.3</span> Gráficos
@@ -1792,13 +1790,13 @@ bivariados</h3>
 <p>Por exemplo, vamos olhar para a distribuição bivariada dos dois
 primeiros caracteres, incluindo também uma reta de regressão por
 espécie:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">ggplot</span>(dentus, <span class="fu">aes</span>(humerus, ulna, <span class="at">group =</span> species, <span class="at">color =</span> species)) <span class="sc">+</span> </span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="fu">aes</span>(<span class="at">group =</span> species))</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">ggplot</span>(dentus, <span class="fu">aes</span>(humerus, ulna, <span class="at">group =</span> species, <span class="at">color =</span> species)) <span class="sc">+</span> </span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="fu">aes</span>(<span class="at">group =</span> species))</span></code></pre></div>
 <p>Vc poderia fazer esse gráfico manualmente para todos os pares de
 caracteres, mas a função ggpairs resume tudo isso de uma vez:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">ggpairs</span>(dentus, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">color =</span> species), </span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>        <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">&quot;humerus&quot;</span>, <span class="st">&quot;ulna&quot;</span>,<span class="st">&quot;femur&quot;</span>, <span class="st">&quot;tibia&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">ggpairs</span>(dentus, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">color =</span> species), </span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>        <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">&quot;humerus&quot;</span>, <span class="st">&quot;ulna&quot;</span>,<span class="st">&quot;femur&quot;</span>, <span class="st">&quot;tibia&quot;</span>))</span></code></pre></div>
 </div>
 </div>
 </div>

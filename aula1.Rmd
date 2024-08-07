@@ -1,7 +1,7 @@
 ---
-title: "Tutorial Biologia Evolutiva 2019"
+title: "Tutorial Biologia Evolutiva 2024"
 author: "Diogo Melo"
-date: "October 03, 2019"
+date: "7 de Agosto, 2024"
 output:
   html_document:
     highlight: tango
