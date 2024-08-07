@@ -89,7 +89,15 @@ head(dentus)
 
 Como podemos ver, os dados estão organizados em linhas e colunas. Cada linha representa um indivíduo, e cada coluna representa um caráter. As 4 primeiras colunas são os caracteres quantitativos, e a quinta coluna contém a espécie de cada indivíduo.
 
-A planilha atualizada para 2023 está disponível nesse [link](https://raw.githubusercontent.com/diogro/BioEvol/master/dentus2023.csv).
+A planilha atualizada para 2024 está disponível nesse [link](https://raw.githubusercontent.com/diogro/BioEvol/master/dentus2024.csv).
+
+Você pode ler esses dados atualizados diretamente no R com o comando:
+
+```{r, eval = FALSE}
+# Carregando os dados atualizados
+dentus = read.csv("https://raw.githubusercontent.com/diogro/BioEvol/master/dentus2024.csv")
+```
+
 
 # Objetivos da Aula 1
 
