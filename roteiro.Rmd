@@ -2,7 +2,7 @@
 title: "Roteiro para Monografia Final"
 subtitle: "Bio 312"
 author: "Gabriel Marroig"
-date: "17 de Agosto, 2023"
+date: "26 de Agosto, 2024"
 output: html_document
 ---
 
@@ -10,14 +10,15 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Existem 5 espécies destes roedores alocadas ao gênero Dentus. Você têm
+
+Existem 5 espécies destes roedores alocadas ao gênero Dentus. Você tem
 medidas corporais tomadas com precisão de 0.01 mm no úmero (coluna 1),
 ulna (coluna 2), tíbia (coluna 3) e fêmur (coluna 4) para as 5 espécies.
 Cada indivíduo teve o sexo identificado durante a coleta. Além destes
 dados, existem na literatura alguns aspectos ecológicos e fisiológicos
 das espécies.
 
--   A espécie E apresenta um desenvolvimento desacelerado em relação às
+-   A espécie A apresenta um desenvolvimento desacelerado em relação às
     demais espécies do grupo. O termo desacelerado pode ser encontrado
     dentro da teoria sobre heterocronia.
 
@@ -45,29 +46,50 @@ trabalho consiste em colocar no papel tudo que você aprendeu nas últimas
 aulas, analisando estes dados e interpretando os resultados. Em
 particular quero que os seguintes pontos sejam abordados:
 
-1. Calcule a média, o desvio padrão e o coeficiente de variação para cada medida e cada espécie e compare caracterizando cada espécie. 
+1.  Calcule a média, o desvio padrão e o coeficiente de variação para
+    cada medida e cada espécie e sexo e compare, caracterizando cada
+    espécie.
 
-2. Calcule as estimativas dos valores médios para os ancestrais usando a filogenia abaixo com comprimentos de ramo dados pela escala acima da filogenia. Calcule as diferenças médias entre as espécies (oito vetores $\Delta z$ ao longo dos ramos da filogenia). Calcule a norma dos vetores $\Delta z$ (ou seja, o comprimento desses vetores). 
+2.  Calcule as estimativas dos valores médios para os ancestrais usando
+    a filogenia abaixo com comprimentos de ramo dados pela escala acima
+    da filogenia (cada ramo vale 1 unidade exceto o ramo que leva a
+    espécie A = 3). Calcule as diferenças médias entre as espécies (oito
+    vetores Δz ao longo dos ramos da filogenia). Calcule a norma dos
+    vetores Δz (ou seja, o comprimento desses vetores).
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
 if(!require(ape)){install.packages("ape"); library(ape)}
-TREE <- "((((B:1, D:1):1, E:2):1, C:3):1, A:4):1;"
+TREE <- "(((C, E):1,(D, B):1):1,A:3);"
 tree <- read.tree(text = TREE)
-tree$node.label = c("root", "CEDB", "EDB", "DB")
+tree$node.label = c("root", "ECBD", "EC", "BD")
 plot(tree, show.node.label=TRUE)
 ```
 
+3.  Compare a estrutura de variação e covariação entre os 4 caracteres
+    nas 5 espécies. Discuta as semelhanças e diferenças entre as
+    espécies no relacionamento destas medidas tanto em relação a padrões
+    (correlações positivas ou negativas) como a magnitudes de associação
+    entre os caracteres.
 
-3. Compare a estrutura de variação e covariação entre os 4 caracteres nas 5 espécies. Discuta as semelhanças e diferenças entre as espécies no relacionamento destas medidas tanto em relação a padrões (correlações positivas ou negativas) como a magnitudes de associação entre os caracteres. 
+4.  Compare estas diferenças (Δz) com o primeiro (PC1) e segundo (PC2)
+    componente principal de cada espécie, por meio de correlação de
+    vetores.
 
-4. Compare estas diferenças ($\Delta z$) com o primeiro (PC1) e segundo (PC2) componente principal de cada espécie, por meio de correlação de vetores. 
+5.  Descreva e compare as linhas de menor resistência evolutiva em cada
+    uma destas espécies (correlação dos PC1s e dos PC2s entre as
+    espécies).
 
-5. Descreva e compare as linhas de menor resistência evolutiva em cada uma destas espécies (correlação dos PC1s e dos PC2s entre as espécies).
+6.  Calcule as matrizes ponderadas para cada nó na filogenia. Compare
+    os Δz do item 2 com os PC1 e PC2 de cada matriz ancestral (nó) do
+    qual aquele ramo da filogenia têm origem.
 
-6. Calcule as matrizes ponderadas para cada nó na filogenia. Compare os $\Delta z$ do item 2 com os PC1 e PC2 de cada matriz ancestral (nó) do qual aquele ramo da filogenia têm origem.
+7.  Discuta as diferenças entre as espécies a luz do conceito de linhas
+    de menor resistência evolutiva.
 
-7. Discuta as diferenças entre as espécies a luz do conceito de linhas de menor resistência evolutiva. 
+8.  Reconstrua os gradientes de seleção para cada ramo da filogenia.
 
-8. Reconstrua os gradientes de seleção para cada ramo da filogenia. 
-
-9. Escreva um ensaio no qual todas as informações acima são organizadas em forma de tabelas e figuras e discutidas propriamente em termos de tudo aquilo que vocês aprenderam nas aulas e das associações passíveis de serem feitas com as informações ecológicas e fisiológicas.   
+9.  Escreva um ensaio no qual todas as informações acima são organizadas
+    em forma de tabelas e figuras e discutidas propriamente em termos de
+    tudo aquilo que vocês aprenderam nas aulas e das associações
+    passíveis de serem feitas com as informações ecológicas e
+    fisiológicas.
