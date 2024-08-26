@@ -53,7 +53,7 @@ particular quero que os seguintes pontos sejam abordados:
 2.  Calcule as estimativas dos valores médios para os ancestrais usando
     a filogenia abaixo com comprimentos de ramo dados pela escala acima
     da filogenia (cada ramo vale 1 unidade exceto o ramo que leva a
-    espécie A = 3). Calcule as diferenças médias entre as espécies (oito
+    espécie E = 3). Calcule as diferenças médias entre as espécies (oito
     vetores Δz ao longo dos ramos da filogenia). Calcule a norma dos
     vetores Δz (ou seja, o comprimento desses vetores).
 
