@@ -59,9 +59,9 @@ particular quero que os seguintes pontos sejam abordados:
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
 if(!require(ape)){install.packages("ape"); library(ape)}
-TREE <- "(((C, E):1,(D, B):1):1,A:3);"
+TREE <- "(((C, A):1,(D, B):1):1,E:3);"
 tree <- read.tree(text = TREE)
-tree$node.label = c("root", "ECBD", "EC", "BD")
+tree$node.label = c("root", "ACBD", "AC", "BD")
 plot(tree, show.node.label=TRUE)
 ```
 
